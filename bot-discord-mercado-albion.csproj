@@ -9,7 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="dotnetenv" Version="3.0.0" />
+    <PackageReference Include="discord.net" Version="3.13.1" />
+    <PackageReference Include="DotNetEnv" Version="3.0.0" />
   </ItemGroup>
 
 </Project>
