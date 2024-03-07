@@ -1,39 +1,66 @@
 ﻿using Discord;
+using Discord.Net;
 using Discord.WebSocket;
 using DotNetEnv;
+using Newtonsoft.Json;
 
 public class Program
 {
-    private static Task Log(LogMessage msg)
+    private static DiscordSocketConfig config = new()
+    {
+        UseInteractionSnowflakeDate = false
+    };
+    private static DiscordSocketClient client = new(config);
+    
+    public static async Task Main()
+    {
+        Env.Load();
+        var token = Environment.GetEnvironmentVariable("TOKEN");
+
+        client.Log += ClientLog;
+        client.Ready += ClientReady;
+        client.SlashCommandExecuted += SlashCommandHandler;
+
+        await client.LoginAsync(TokenType.Bot, token);
+        await client.StartAsync();
+
+        await Task.Delay(-1);
+    }
+
+    private static Task ClientLog(LogMessage msg)
     {
         Console.WriteLine(msg.ToString());
         return Task.CompletedTask;
     }
 
-    private static DiscordSocketClient _client;
-
-    public static async Task Main()
+    private static async Task ClientReady()
     {
-        _client = new DiscordSocketClient();
+        var globalCommand = new SlashCommandBuilder()
+            .WithName("teste")
+            .WithDescription("teste descrição");
 
-        _client.Log += Log;
+        try 
+        {
+            await client.CreateGlobalApplicationCommandAsync(globalCommand.Build());
+        }
+        catch(HttpException exception)
+        {
+            Console.WriteLine(exception);
+        }
+    }
 
-        
+    private static async Task SlashCommandHandler(SocketSlashCommand command)
+    {   
+        switch(command.Data.Name)
+        {
+            case "teste":
+                await TesteCommand(command);
+                break;
+        }
+    }
 
-        //  You can assign your bot token to a string, and pass that in to connect.
-        //  This is, however, insecure, particularly if you plan to have your code hosted in a public repository.
-        Env.Load();
-        var token = Environment.GetEnvironmentVariable("TOKEN");
-
-        // Some alternative options would be to keep your token in an Environment Variable or a standalone file.
-        // var token = Environment.GetEnvironmentVariable("NameOfYourEnvironmentVariable");
-        // var token = File.ReadAllText("token.txt");
-        // var token = JsonConvert.DeserializeObject<AConfigurationClass>(File.ReadAllText("config.json")).Token;
-
-        await _client.LoginAsync(TokenType.Bot, token);
-        await _client.StartAsync();
-
-        // Block this task until the program is closed.
-        await Task.Delay(-1);
+    private static async Task TesteCommand(SocketSlashCommand command)
+    {
+        await command.RespondAsync("testado!");
     }
 }
