@@ -1,8 +1,8 @@
 ﻿using Discord;
-using Discord.Net;
 using Discord.WebSocket;
 using DotNetEnv;
-using Newtonsoft.Json;
+using Bot.Commands;
+using Bot.CommandsData;
 
 public class Program
 {
@@ -19,7 +19,7 @@ public class Program
 
         client.Log += ClientLog;
         client.Ready += ClientReady;
-        client.SlashCommandExecuted += SlashCommandHandler;
+        client.SlashCommandExecuted += Commands.SlashCommandHandler;
 
         await client.LoginAsync(TokenType.Bot, token);
         await client.StartAsync();
@@ -35,32 +35,8 @@ public class Program
 
     private static async Task ClientReady()
     {
-        var globalCommand = new SlashCommandBuilder()
-            .WithName("teste")
-            .WithDescription("teste descrição");
+        await CommandsData.Load(client);
 
-        try 
-        {
-            await client.CreateGlobalApplicationCommandAsync(globalCommand.Build());
-        }
-        catch(HttpException exception)
-        {
-            Console.WriteLine(exception);
-        }
     }
-
-    private static async Task SlashCommandHandler(SocketSlashCommand command)
-    {   
-        switch(command.Data.Name)
-        {
-            case "teste":
-                await TesteCommand(command);
-                break;
-        }
-    }
-
-    private static async Task TesteCommand(SocketSlashCommand command)
-    {
-        await command.RespondAsync("testado!");
-    }
+    
 }
