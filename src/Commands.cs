@@ -1,5 +1,6 @@
-
 using Discord.WebSocket;
+using Sprache;
+using Bot.Items;
 
 namespace Bot.Commands {
     public class Commands {
@@ -8,8 +9,8 @@ namespace Bot.Commands {
         {   
         switch(command.Data.Name)
             {
-                case "teste1":
-                    await Teste1Command(command);
+                case "search":
+                    await SearchCommand(command);
                     break;
                 
                 case "teste2":
@@ -18,8 +19,20 @@ namespace Bot.Commands {
             }
         }
 
-        private static async Task Teste1Command(SocketSlashCommand command)
-        {
+        private static async Task SearchCommand(SocketSlashCommand command)
+        {   
+            var itemsData = ItemsData.Instance.GetData();
+
+            string search = (string)command.Data.Options.First().Value;
+
+            var result = from itemData in itemsData
+                        where itemData.name.Contains(search)
+                        select itemData;
+
+            foreach (Item item in result) {
+                Console.WriteLine($"{item.name} {item.tier}");
+            }
+
             await command.RespondAsync("testado 1!");
         }
 

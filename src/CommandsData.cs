@@ -19,8 +19,11 @@ namespace Bot.CommandsData {
         }
 
         private static SlashCommandBuilder TesteCommandData = new SlashCommandBuilder()
-            .WithName("teste1")
-            .WithDescription("teste descrição 1");
+            .WithName("search")
+            .WithDescription("Busca item pelo nome")
+            .AddOption("busca", ApplicationCommandOptionType.String, "nome do item", isRequired: true);
+            
+            
         
         private static SlashCommandBuilder Teste2CommandData = new SlashCommandBuilder()
             .WithName("teste2")

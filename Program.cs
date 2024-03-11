@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using DotNetEnv;
 using Bot.Commands;
 using Bot.CommandsData;
+using Bot.Items;
 
 public class Program
 {
@@ -34,7 +35,8 @@ public class Program
     }
 
     private static async Task ClientReady()
-    {
+    {   
+        ItemsData.Instance.GetData();
         await CommandsData.Load(client);
 
     }
