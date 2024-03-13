@@ -1,6 +1,7 @@
 using Discord.WebSocket;
 using Bot.Items;
 using Discord;
+using System.Text.RegularExpressions;
 
 namespace Bot.Commands {
     public class Commands {
@@ -8,9 +9,14 @@ namespace Bot.Commands {
         {
             string search = (string)command.Data.Options.First().Value;
 
+            var tiers = Regex.Matches(search, @"\d.\d").Select(match => match.Value);
+
+            search = Regex.Replace(search, @"\d.\d", "");
+            search = search.Trim();
+
             var result = from itemData in itemsData
-                        where itemData.Name.Contains(search, StringComparison.OrdinalIgnoreCase)
-                        select $"{itemData.Name} {itemData.Tier}";
+                where itemData.Name.Contains(search, StringComparison.OrdinalIgnoreCase) && tiers.Contains(itemData.Tier)
+                select $"{itemData.Name} {itemData.Tier}";
             
             string list = string.Join('\n', result);
 
