@@ -5,17 +5,18 @@ namespace Bot.Items {
     
     public class Item
     {
-        public string name { get; set; }
-        public string code { get; set; }
-        public string tier { get; set; }
+        public required string Name { get; set; }
+        public required string Code { get; set; }
+        public required string Tier { get; set; }
     }
     
-    public class ItemsData
+    public sealed class ItemsData
     {
         private static ItemsData? instance;
         private List<Item> data;
 
-        private ItemsData() {
+        private ItemsData()
+        {
             string json = File.ReadAllText("./src/data/ItemsData.json");
             data = JsonConvert.DeserializeObject<List<Item>>(json);
 
@@ -33,10 +34,12 @@ namespace Bot.Items {
             }
         }
 
-        public List<Item> GetData() {
-            return data;
+        public List<Item> Data
+        {
+            get
+            {
+                return data;
+            }
         }
-
-        
     }
 } 

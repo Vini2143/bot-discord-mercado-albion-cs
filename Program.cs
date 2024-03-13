@@ -20,7 +20,7 @@ public class Program
 
         client.Log += ClientLog;
         client.Ready += ClientReady;
-        client.SlashCommandExecuted += Commands.SlashCommandHandler;
+        client.SlashCommandExecuted += SlashCommandHandler;
 
         await client.LoginAsync(TokenType.Bot, token);
         await client.StartAsync();
@@ -36,9 +36,20 @@ public class Program
 
     private static async Task ClientReady()
     {   
-        ItemsData.Instance.GetData();
         await CommandsData.Load(client);
-
     }
-    
+
+    private static async Task SlashCommandHandler(SocketSlashCommand command)
+    {   
+        switch(command.Data.Name)
+        {
+            case "search":
+                await Commands.SearchCommand(command, ItemsData.Instance.Data);
+                break;
+            
+            case "teste":
+                await Commands.TesteCommand(command);
+                break;
+        }
+    }
 }

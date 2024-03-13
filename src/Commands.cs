@@ -1,44 +1,31 @@
 using Discord.WebSocket;
-using Sprache;
 using Bot.Items;
+using Discord;
 
 namespace Bot.Commands {
     public class Commands {
-
-        public static async Task SlashCommandHandler(SocketSlashCommand command)
-        {   
-        switch(command.Data.Name)
-            {
-                case "search":
-                    await SearchCommand(command);
-                    break;
-                
-                case "teste2":
-                    await Teste2Command(command);
-                    break;
-            }
-        }
-
-        private static async Task SearchCommand(SocketSlashCommand command)
-        {   
-            var itemsData = ItemsData.Instance.GetData();
-
+        public static async Task SearchCommand(SocketSlashCommand command, List<Item> itemsData)
+        {
             string search = (string)command.Data.Options.First().Value;
 
             var result = from itemData in itemsData
-                        where itemData.name.Contains(search)
-                        select itemData;
+                        where itemData.Name.Contains(search, StringComparison.OrdinalIgnoreCase)
+                        select $"{itemData.Name} {itemData.Tier}";
+            
+            string list = string.Join('\n', result);
 
-            foreach (Item item in result) {
-                Console.WriteLine($"{item.name} {item.tier}");
-            }
+            var embed = new EmbedBuilder()
+                .WithTitle("Resultado")
+                .WithDescription(list)
+                .WithColor(Color.DarkBlue)
+                .WithCurrentTimestamp();
 
-            await command.RespondAsync("testado 1!");
+            await command.RespondAsync(embed: embed.Build());
         }
 
-        private static async Task Teste2Command(SocketSlashCommand command)
+        public static async Task TesteCommand(SocketSlashCommand command)
         {
-            await command.RespondAsync("testado 2!");
+            await command.RespondAsync("testado!");
         }
     } 
 }

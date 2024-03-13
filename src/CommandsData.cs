@@ -9,8 +9,8 @@ namespace Bot.CommandsData {
             
             try 
             {
-                await client.CreateGlobalApplicationCommandAsync(TesteCommandData.Build());
-                await client.CreateGlobalApplicationCommandAsync(Teste2CommandData.Build());
+                await client.CreateGlobalApplicationCommandAsync(searchCommandData.Build());
+                await client.CreateGlobalApplicationCommandAsync(testeCommandData.Build());
             }
             catch(HttpException exception)
             {
@@ -18,15 +18,15 @@ namespace Bot.CommandsData {
             }
         }
 
-        private static SlashCommandBuilder TesteCommandData = new SlashCommandBuilder()
+        private static SlashCommandBuilder searchCommandData = new SlashCommandBuilder()
             .WithName("search")
             .WithDescription("Busca item pelo nome")
             .AddOption("busca", ApplicationCommandOptionType.String, "nome do item", isRequired: true);
             
             
         
-        private static SlashCommandBuilder Teste2CommandData = new SlashCommandBuilder()
-            .WithName("teste2")
-            .WithDescription("teste descrição 2");
+        private static SlashCommandBuilder testeCommandData = new SlashCommandBuilder()
+            .WithName("teste")
+            .WithDescription("teste descrição");
     } 
 }
