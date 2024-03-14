@@ -2,7 +2,8 @@ using Discord;
 using Discord.Net;
 using Discord.WebSocket;
 
-namespace Bot.CommandsData {
+namespace Bot.CommandsData 
+{
     public class CommandsData {
 
         public static async Task Load(DiscordSocketClient client) {
@@ -23,8 +24,6 @@ namespace Bot.CommandsData {
             .WithDescription("Busca item pelo nome")
             .AddOption("busca", ApplicationCommandOptionType.String, "nome do item", isRequired: true);
             
-            
-        
         private static SlashCommandBuilder testeCommandData = new SlashCommandBuilder()
             .WithName("teste")
             .WithDescription("teste descrição");

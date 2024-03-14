@@ -1,23 +1,23 @@
+using System.Text.RegularExpressions;
+using Discord;
 using Discord.WebSocket;
 using Bot.Items;
-using Discord;
-using System.Text.RegularExpressions;
+using Bot.Utils;
 
-namespace Bot.Commands {
+namespace Bot.Commands
+{
     public class Commands {
         public static async Task SearchCommand(SocketSlashCommand command, List<Item> itemsData)
         {
-            string search = (string)command.Data.Options.First().Value;
+            string input = (string)command.Data.Options.First().Value;
 
-            var tiers = Regex.Matches(search, @"\d.\d").Select(match => match.Value);
+            var tiers = Regex.Matches(input, @"\d.\d").Select(match => match.Value);
 
-            search = Regex.Replace(search, @"\d.\d", "");
-            search = search.Trim();
+            input = Regex.Replace(input, @"\d.\d", "");
+            input = input.Trim();
 
-            var result = from itemData in itemsData
-                where itemData.Name.Contains(search, StringComparison.OrdinalIgnoreCase) && tiers.Contains(itemData.Tier)
-                select $"{itemData.Name} {itemData.Tier}";
-            
+            IEnumerable<string> result = Functions.SearchItem(itemsData, input, tiers);
+
             string list = string.Join('\n', result);
 
             var embed = new EmbedBuilder()
