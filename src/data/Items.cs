@@ -13,12 +13,12 @@ namespace Bot.Items {
     public sealed class ItemsData
     {
         private static ItemsData? instance;
-        private List<Item> data;
+        private IEnumerable<Item> data;
 
         private ItemsData()
         {
             string json = File.ReadAllText("./src/data/ItemsData.json");
-            data = JsonConvert.DeserializeObject<List<Item>>(json);
+            data = JsonConvert.DeserializeObject<IEnumerable<Item>>(json);
 
         }
 
@@ -34,7 +34,7 @@ namespace Bot.Items {
             }
         }
 
-        public List<Item> Data
+        public IEnumerable<Item> Data
         {
             get
             {

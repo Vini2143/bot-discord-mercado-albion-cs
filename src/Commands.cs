@@ -6,23 +6,24 @@ using Bot.Utils;
 
 namespace Bot.Commands
 {
-    public class Commands {
-        public static async Task SearchCommand(SocketSlashCommand command, List<Item> itemsData)
+    public partial class Commands {
+        public static async Task SearchCommand(SocketSlashCommand command, IEnumerable<Item> itemsData)
         {
             string input = (string)command.Data.Options.First().Value;
 
-            var tiers = Regex.Matches(input, @"\d.\d").Select(match => match.Value);
+            var tiers = MyRegex().Matches(input).Select(match => match.Value);
 
-            input = Regex.Replace(input, @"\d.\d", "");
+            input = MyRegex().Replace(input, "");
             input = input.Trim();
 
-            IEnumerable<string> result = Functions.SearchItem(itemsData, input, tiers);
+            IEnumerable<Item> result = Functions.SearchItem(itemsData, input, tiers);
 
             string list = string.Join('\n', result);
+            await Functions.RequestItem(result);
 
             var embed = new EmbedBuilder()
                 .WithTitle("Resultado")
-                .WithDescription(list)
+                .WithDescription("descrição")
                 .WithColor(Color.DarkBlue)
                 .WithCurrentTimestamp();
 
@@ -33,5 +34,8 @@ namespace Bot.Commands
         {
             await command.RespondAsync("testado!");
         }
+
+        [GeneratedRegex(@"\d.\d")]
+        private static partial Regex MyRegex();
     } 
 }
