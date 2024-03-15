@@ -1,15 +1,15 @@
+using System.Text.RegularExpressions;
 using Bot.Items;
 using Newtonsoft.Json;
-using Sprache;
 
 namespace Bot.Utils
 {   
     public class MarketData 
     {
         [JsonProperty("item_id")]
-        public string ItemId { get; set; }
+        public string? ItemId { get; set; }
         [JsonProperty("city")]
-        public string City { get; set; }
+        public string? City { get; set; }
         [JsonProperty("quality")]
         public int Quality { get; set; }
         [JsonProperty("sell_price_min")]
@@ -29,9 +29,15 @@ namespace Bot.Utils
         [JsonProperty("buy_price_max_date")]
         public DateTime BuyPriceMaxDate { get; set; }
     }
-    public class Functions
+    public partial class Functions
     {
-        public static IEnumerable<Item> SearchItem(IEnumerable<Item> items, string input, IEnumerable<string> tiers = default!){
+        public static IEnumerable<Item> SearchItem(IEnumerable<Item> items, string input)
+        {
+            IEnumerable<string> tiers = TierRegex().Matches(input).Select(match => match.Value);
+
+            input = CharRegex().Replace(input, "");
+            input = input.Trim();
+
             if (tiers.Any())
             {
                 IEnumerable<Item> result = from item in items
@@ -48,12 +54,12 @@ namespace Bot.Utils
             }
         }
 
-        public static async Task RequestItem(IEnumerable<Item> items)
+        public static async Task<IEnumerable<string>> RequestItem(IEnumerable<Item> items)
         {   
 
-            IEnumerable<string> codeList = items.Select(item => item.Code);
+            Dictionary<string, string> codeDict = items.Select(item => item).ToDictionary(item => item.Code, item => $"{item.Name} {item.Tier}");
 
-            string apiUrl = $"https://west.albion-online-data.com/api/v2/stats/prices/{string.Join(",", codeList)}";
+            string apiUrl = $"https://west.albion-online-data.com/api/v2/stats/prices/{string.Join(",", codeDict.Keys)}";
 
             HttpClient client = new();
 
@@ -61,32 +67,34 @@ namespace Bot.Utils
             {
                 HttpResponseMessage response = await client.GetAsync(apiUrl);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseBody = await response.Content.ReadAsStringAsync();
+                response.EnsureSuccessStatusCode();
+            
+                string responseBody = await response.Content.ReadAsStringAsync();
 
-                    IEnumerable<MarketData> list = JsonConvert.DeserializeObject<IEnumerable<MarketData>>(responseBody);
+                IEnumerable<MarketData> list = JsonConvert.DeserializeObject<IEnumerable<MarketData>>(responseBody)!;
 
-                    var result = from item in list
-                        where item.BuyPriceMax != 0 && item.SellPriceMin != 0
-                        orderby item.SellPriceMin
-                        select $"{item.ItemId} {item.City} {item.SellPriceMin}";
-                        
-                    foreach(string registro in result)
-                    {
-                        Console.WriteLine(registro);
-                    }
+                DateTime now = DateTime.UtcNow;
+
+                var result = from item in list
+                    where (now - item.SellPriceMinDate).TotalHours <= 12
+                    orderby item.SellPriceMin
+                    select $"{codeDict[item.ItemId!]} {item.City} {item.SellPriceMin} há {(now - item.SellPriceMinDate).Hours} horas e {(now - item.SellPriceMinDate).Minutes} minutos";
                     
-                }
-                else
-                {
-                    Console.WriteLine("Erro ao realizar a requisição: " + response.StatusCode);
-                }
+                return result;
+        
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Ocorreu um erro: " + ex.Message);
+                return [];
             }
         }
+        
+        [GeneratedRegex(@"\d.\d")]
+        private static partial Regex TierRegex();
+        [GeneratedRegex(@"[^\p{L}\s]")]
+        private static partial Regex CharRegex();
     }
+        
+        
 }

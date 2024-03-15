@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using Discord;
 using Discord.WebSocket;
 using Bot.Items;
@@ -6,25 +5,24 @@ using Bot.Utils;
 
 namespace Bot.Commands
 {
-    public partial class Commands {
+    public class Commands 
+    {
         public static async Task SearchCommand(SocketSlashCommand command, IEnumerable<Item> itemsData)
         {
             string input = (string)command.Data.Options.First().Value;
 
-            var tiers = MyRegex().Matches(input).Select(match => match.Value);
+            IEnumerable<Item> searchResult = Functions.SearchItem(itemsData, input);
 
-            input = MyRegex().Replace(input, "");
-            input = input.Trim();
+            IEnumerable<string> requestResult = await Functions.RequestItem(searchResult);
+            
 
-            IEnumerable<Item> result = Functions.SearchItem(itemsData, input, tiers);
+            var embed = new EmbedBuilder
+            {
+                Title = "Busca",
+                Color = Color.DarkBlue,
+            };
 
-            string list = string.Join('\n', result);
-            await Functions.RequestItem(result);
-
-            var embed = new EmbedBuilder()
-                .WithTitle("Resultado")
-                .WithDescription("descrição")
-                .WithColor(Color.DarkBlue)
+            embed.AddField("Resultado", requestResult.Any() ? string.Join('\n', requestResult) : "Sem Resultados")
                 .WithCurrentTimestamp();
 
             await command.RespondAsync(embed: embed.Build());
@@ -35,7 +33,5 @@ namespace Bot.Commands
             await command.RespondAsync("testado!");
         }
 
-        [GeneratedRegex(@"\d.\d")]
-        private static partial Regex MyRegex();
     } 
 }

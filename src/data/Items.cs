@@ -18,7 +18,7 @@ namespace Bot.Items {
         private ItemsData()
         {
             string json = File.ReadAllText("./src/data/ItemsData.json");
-            data = JsonConvert.DeserializeObject<IEnumerable<Item>>(json);
+            data = JsonConvert.DeserializeObject<IEnumerable<Item>>(json)!;
 
         }
 
