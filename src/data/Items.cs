@@ -26,10 +26,7 @@ namespace Bot.Items {
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new ItemsData();
-                }
+                instance ??= new ItemsData();
                 return instance;
             }
         }

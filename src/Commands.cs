@@ -13,7 +13,7 @@ namespace Bot.Commands
 
             IEnumerable<Item> searchResult = Functions.SearchItem(itemsData, input);
 
-            IEnumerable<string> requestResult = await Functions.RequestItem(searchResult);
+            var requestResult = await Functions.RequestItem(searchResult);
             
 
             var embed = new EmbedBuilder
@@ -21,9 +21,15 @@ namespace Bot.Commands
                 Title = "Busca",
                 Color = Color.DarkBlue,
             };
-
-            embed.AddField("Resultado", requestResult.Any() ? string.Join('\n', requestResult) : "Sem Resultados")
-                .WithCurrentTimestamp();
+            
+            if (!requestResult["name"].Any()) {
+                await command.RespondAsync("Sem Resultados!");
+                return;
+            }
+            
+            embed.AddField("Nome", string.Join('\n', requestResult["name"]), true);
+            embed.AddField("Cidade", string.Join('\n', requestResult["city"]), true);
+            embed.AddField("Preço - Tempo", string.Join('\n', requestResult["price-time"]), true);
 
             await command.RespondAsync(embed: embed.Build());
         }

@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
 using Bot.Items;
 using Newtonsoft.Json;
@@ -7,9 +8,9 @@ namespace Bot.Utils
     public class MarketData 
     {
         [JsonProperty("item_id")]
-        public string? ItemId { get; set; }
+        public required string ItemId { get; set; }
         [JsonProperty("city")]
-        public string? City { get; set; }
+        public required string City { get; set; }
         [JsonProperty("quality")]
         public int Quality { get; set; }
         [JsonProperty("sell_price_min")]
@@ -54,10 +55,10 @@ namespace Bot.Utils
             }
         }
 
-        public static async Task<IEnumerable<string>> RequestItem(IEnumerable<Item> items)
+        public static async Task<Dictionary<string, List<string>>> RequestItem(IEnumerable<Item> items)
         {   
 
-            Dictionary<string, string> codeDict = items.Select(item => item).ToDictionary(item => item.Code, item => $"{item.Name} {item.Tier}");
+            Dictionary<string, string> codeDict = items.Select(item => item).ToDictionary(item => item.Code, item => $"{NamesRegex().Replace(item.Name, "")} {item.Tier}");
 
             string apiUrl = $"https://west.albion-online-data.com/api/v2/stats/prices/{string.Join(",", codeDict.Keys)}";
 
@@ -77,10 +78,22 @@ namespace Bot.Utils
 
                 var result = from item in list
                     where (now - item.SellPriceMinDate).TotalHours <= 12
-                    orderby item.SellPriceMin
-                    select $"{codeDict[item.ItemId!]} {item.City} {item.SellPriceMin} há {(now - item.SellPriceMinDate).Hours} horas e {(now - item.SellPriceMinDate).Minutes} minutos";
-                    
-                return result;
+                    select item;                   
+                
+                Dictionary<string, List<string>> data = new()
+                {
+                    ["name"] = [],
+                    ["city"] = [],
+                    ["price-time"] = [],
+                };
+
+                foreach (var item in result) {
+                    data["name"].Add(codeDict[item.ItemId]);
+                    data["city"].Add(item.City);
+                    data["price-time"].Add($"{item.SellPriceMin} há {(now - item.SellPriceMinDate).Hours} horas e {(now - item.SellPriceMinDate).Minutes} minutos");
+                }
+
+                return data;
         
             }
             catch (Exception ex)
@@ -94,6 +107,8 @@ namespace Bot.Utils
         private static partial Regex TierRegex();
         [GeneratedRegex(@"[^\p{L}\s]")]
         private static partial Regex CharRegex();
+        [GeneratedRegex(@"\sdo\s(Novato|Iniciante|Adepto|Perito|Mestre|Grão-mestre|Ancião)")]
+        private static partial Regex NamesRegex();
     }
         
         
