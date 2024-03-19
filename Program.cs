@@ -21,6 +21,7 @@ public class Program
         client.Log += ClientLog;
         client.Ready += ClientReady;
         client.SlashCommandExecuted += SlashCommandHandler;
+        client.ButtonExecuted += ButtonHandler;
 
         await client.LoginAsync(TokenType.Bot, token);
         await client.StartAsync();
@@ -50,6 +51,50 @@ public class Program
             case "teste":
                 await Commands.TesteCommand(command);
                 break;
+        }
+    }
+
+    private static async Task ButtonHandler(SocketMessageComponent component)
+    {
+        switch(component.Data.CustomId)
+        {
+            case "next-button":
+                var embed = new EmbedBuilder
+                {
+                    Title = "Busca",
+                    Color = Color.DarkBlue,
+                };
+
+                var buttons = new ComponentBuilder()
+                    .WithButton("<<", "previous-button")
+                    .WithButton(">>", "next-button");
+                  
+                
+                await component.UpdateAsync(msg => {
+                    msg.Content = "Proxima";
+                    msg.Embed = embed.Build();
+                    msg.Components = buttons.Build();
+            });
+            break;
+
+            case "previous-button":
+                embed = new EmbedBuilder
+                {
+                    Title = "Busca",
+                    Color = Color.DarkBlue,
+                };
+
+                buttons = new ComponentBuilder()
+                    .WithButton("<<", "previous-button")
+                    .WithButton(">>", "next-button");
+                  
+                
+                await component.UpdateAsync(msg => {
+                    msg.Content = "Anterior";
+                    msg.Embed = embed.Build();
+                    msg.Components = buttons.Build();
+            });
+            break;
         }
     }
 }

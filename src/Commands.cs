@@ -31,7 +31,12 @@ namespace Bot.Commands
             embed.AddField("Cidade", string.Join('\n', requestResult["city"]), true);
             embed.AddField("Preço - Tempo", string.Join('\n', requestResult["price-time"]), true);
 
-            await command.RespondAsync(embed: embed.Build());
+            var buttons = new ComponentBuilder()
+                .WithButton("<<", "previous-button")
+                .WithButton(">>", "next-button");
+
+
+            await command.RespondAsync(embed: embed.Build(), components: buttons.Build());
         }
 
         public static async Task TesteCommand(SocketSlashCommand command)
