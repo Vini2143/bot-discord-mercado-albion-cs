@@ -1,8 +1,10 @@
 ﻿using DSharpPlus;
 using DotNetEnv;
 using Bot.Commands;
-using Bot.Items;
 using DSharpPlus.SlashCommands;
+using DSharpPlus.Interactivity.Extensions;
+using DSharpPlus.Interactivity.Enums;
+using DSharpPlus.Interactivity;
 
 public class Program
 {
@@ -19,6 +21,13 @@ public class Program
 
         var slash = client.UseSlashCommands();
         slash.RegisterCommands<Commands>();
+
+        client.UseInteractivity(new InteractivityConfiguration() 
+        { 
+            PollBehaviour = PollBehaviour.KeepEmojis,
+            Timeout = TimeSpan.FromSeconds(30)
+        });
+        
 
         await client.ConnectAsync();
         await Task.Delay(-1);

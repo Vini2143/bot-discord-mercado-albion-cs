@@ -1,5 +1,7 @@
 using System.Text.RegularExpressions;
 using Bot.Items;
+using DSharpPlus.Entities;
+using DSharpPlus.Interactivity;
 using Newtonsoft.Json;
 
 namespace Bot.Utils
@@ -30,7 +32,7 @@ namespace Bot.Utils
         public DateTime BuyPriceMaxDate { get; set; }
     }
     public partial class Functions
-    {
+    {   
         public static IEnumerable<Item> SearchItem(IEnumerable<Item> items, string input)
         {
             IEnumerable<string> tiers = TierRegex().Matches(input).Select(match => match.Value);
@@ -104,7 +106,7 @@ namespace Bot.Utils
         
         [GeneratedRegex(@"\d.\d")]
         private static partial Regex TierRegex();
-        [GeneratedRegex(@"[^\p{L}\s]")]
+        [GeneratedRegex(@"[^\p{L}\s-]")]
         private static partial Regex CharRegex();
         [GeneratedRegex(@"\sdo\s(Novato|Iniciante|Adepto|Perito|Mestre|Grão-mestre|Ancião)")]
         private static partial Regex NamesRegex();
