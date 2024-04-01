@@ -13,7 +13,7 @@ namespace Bot.Items {
     public sealed class ItemsData
     {
         private static ItemsData? instance;
-        private IEnumerable<Item> data;
+        private readonly IEnumerable<Item> data;
 
         private ItemsData()
         {

@@ -1,7 +1,5 @@
 using System.Text.RegularExpressions;
 using Bot.Items;
-using DSharpPlus.Entities;
-using DSharpPlus.Interactivity;
 using Newtonsoft.Json;
 
 namespace Bot.Utils
@@ -33,6 +31,7 @@ namespace Bot.Utils
     }
     public partial class Functions
     {   
+        private static readonly List<string> qualities = ["Normal", "Bom", "Exepcional", "Excelente", "Obra-Prima"];
         public static IEnumerable<Item> SearchItem(IEnumerable<Item> items, string input)
         {
             IEnumerable<string> tiers = TierRegex().Matches(input).Select(match => match.Value);
@@ -40,23 +39,24 @@ namespace Bot.Utils
             input = CharRegex().Replace(input, "");
             input = input.Trim();
 
+            IEnumerable<Item> result = [];
+
             if (tiers.Any())
             {
-                IEnumerable<Item> result = from item in items
+                result = from item in items
                     where item.Name.Contains(input, StringComparison.OrdinalIgnoreCase) && tiers.Contains(item.Tier)
                     select item;
                 return result;
             }
-            else
-            {
-                IEnumerable<Item> result = from item in items
-                    where item.Name.Contains(input, StringComparison.OrdinalIgnoreCase) 
-                    select item;
-                return result;
-            }
+        
+            result = from item in items
+                where item.Name.Contains(input, StringComparison.OrdinalIgnoreCase) 
+                select item;
+            return result;
+        
         }
 
-        public static async Task<Dictionary<string, List<string>>> RequestItem(IEnumerable<Item> items)
+        public static async Task<Dictionary<string, List<List<string>>>> RequestItem(IEnumerable<Item> items)
         {   
 
             Dictionary<string, string> codeDict = items.Select(item => item).ToDictionary(item => item.Code, item => $"{NamesRegex().Replace(item.Name, "")} {item.Tier}");
@@ -81,17 +81,16 @@ namespace Bot.Utils
                     where (now - item.SellPriceMinDate).TotalHours <= 12
                     select item;                   
                 
-                Dictionary<string, List<string>> data = new()
-                {
-                    ["name"] = [],
-                    ["city"] = [],
-                    ["price-time"] = [],
-                };
+                Dictionary<string, List<List<string>>> data = [];
 
                 foreach (var item in result) {
-                    data["name"].Add(codeDict[item.ItemId]);
-                    data["city"].Add(item.City);
-                    data["price-time"].Add($"{item.SellPriceMin} há {(now - item.SellPriceMinDate).Hours} horas e {(now - item.SellPriceMinDate).Minutes} minutos");
+                    if(!data.ContainsKey(codeDict[item.ItemId])){
+                        data[codeDict[item.ItemId]] = [[], [], []];
+                    }
+
+                    data[codeDict[item.ItemId]][0].Add(item.SellPriceMin.ToString());
+                    data[codeDict[item.ItemId]][1].Add($"{qualities[item.Quality - 1]}");
+                    data[codeDict[item.ItemId]][2].Add($"{item.City} há {(now - item.SellPriceMinDate).Hours:D2}:{(now - item.SellPriceMinDate).Minutes:D2} atrás");
                 }
 
                 return data;
@@ -111,6 +110,4 @@ namespace Bot.Utils
         [GeneratedRegex(@"\sdo\s(Novato|Iniciante|Adepto|Perito|Mestre|Grão-mestre|Ancião)")]
         private static partial Regex NamesRegex();
     }
-        
-        
 }
