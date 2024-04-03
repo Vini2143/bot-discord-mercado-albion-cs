@@ -3,21 +3,18 @@ using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Extensions;
-using Bot.Items;
 using Bot.Utils;
 
 namespace Bot.Commands
 {   
     
-    public class Commands : ApplicationCommandModule
+    public sealed class Commands : ApplicationCommandModule
     {   
-        private readonly IEnumerable<Item> data = ItemsData.Instance.Data;
-
         [SlashCommand("search", "Busca um item pelo nome")]
         public async Task SearchCommand(InteractionContext ctx, [Option("busca", "Nome do item")] string input)
         {
 
-            IEnumerable<Item> searchResult = Functions.SearchItem(data, input);
+            IEnumerable<Item> searchResult = Functions.SearchItem(input);
 
             var requestResult = await Functions.RequestItem(searchResult);
             if (!requestResult.Any()) 

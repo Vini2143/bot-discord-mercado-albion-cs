@@ -1,10 +1,9 @@
 using System.Text.RegularExpressions;
-using Bot.Items;
 using Newtonsoft.Json;
 
 namespace Bot.Utils
 {   
-    public class MarketData 
+    public sealed class MarketData 
     {
         [JsonProperty("item_id")]
         public required string ItemId { get; set; }
@@ -29,10 +28,18 @@ namespace Bot.Utils
         [JsonProperty("buy_price_max_date")]
         public DateTime BuyPriceMaxDate { get; set; }
     }
-    public partial class Functions
+    public sealed class Item
+    {
+        public required string Name { get; set; }
+        public required string Code { get; set; }
+        public required string Tier { get; set; }
+    }
+
+    public sealed partial class Functions
     {   
+        private static readonly IEnumerable<Item> items = JsonConvert.DeserializeObject<IEnumerable<Item>>(File.ReadAllText("./src/data/ItemsData.json"))!;
         private static readonly List<string> qualities = ["Normal", "Bom", "Exepcional", "Excelente", "Obra-Prima"];
-        public static IEnumerable<Item> SearchItem(IEnumerable<Item> items, string input)
+        public static IEnumerable<Item> SearchItem(string input)
         {
             IEnumerable<string> tiers = TierRegex().Matches(input).Select(match => match.Value);
 
