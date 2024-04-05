@@ -4,6 +4,7 @@ using DSharpPlus.SlashCommands;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Extensions;
 using Bot.Utils;
+using Microsoft.VisualBasic;
 
 namespace Bot.Commands
 {   
@@ -12,12 +13,11 @@ namespace Bot.Commands
     {   
         [SlashCommand("search", "Busca um item pelo nome")]
         public async Task SearchCommand(InteractionContext ctx, [Option("busca", "Nome do item")] string input)
-        {
+        {   
+            Functions.SearchItem(input, out var inputItems, out var inputQualities);
+            var requestResult = await Functions.RequestItem(inputItems, inputQualities);
 
-            IEnumerable<Item> searchResult = Functions.SearchItem(input);
-
-            var requestResult = await Functions.RequestItem(searchResult);
-            if (!requestResult.Any()) 
+            if (requestResult.Count == 0) 
             {
                 await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Sem resultados!"));
                 return;
@@ -25,7 +25,7 @@ namespace Bot.Commands
 
             var interactivity = ctx.Client.GetInteractivity();
 
-            List<Page>pages = [];
+            List<Page> pages = [];
 
             try {
                 foreach (var item in requestResult)
@@ -39,7 +39,7 @@ namespace Bot.Commands
                     pages.Add(page);
                 }
 
-                await interactivity.SendPaginatedResponseAsync(ctx.Interaction , false ,ctx.Member, pages);
+                await interactivity.SendPaginatedResponseAsync(ctx.Interaction, false, ctx.Member, pages);
 
             }
             catch (Exception ex)
