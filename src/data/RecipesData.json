@@ -1,0 +1,34 @@
+{
+    "T4_LEATHER": 
+    {   "Code": "T4_LEATHER",
+        "Craft": 
+        {
+            "T3_LEATHER": 1,
+            "T4_HIDE": 2
+        }
+    },
+    "T4_LEATHER_LEVEL1@1": 
+    {   "Code": "T4_LEATHER_LEVEL1@1",
+        "Craft": 
+        {
+            "T3_LEATHER": 1,
+            "T4_HIDE_LEVEL1@1": 2
+        }
+    },
+    "T4_LEATHER_LEVEL2@2": 
+    {   "Code": "T4_LEATHER_LEVEL2@2",
+        "Craft": 
+        {
+            "T3_LEATHER": 1,
+            "T4_HIDE_LEVEL2@2": 2
+        }
+    },
+    "T4_LEATHER_LEVEL3@3": 
+    {   "Code": "T4_LEATHER_LEVEL3@3",
+        "Craft": 
+        {
+            "T3_LEATHER": 1,
+            "T4_HIDE_LEVEL3@3": 2
+        }
+    }
+}

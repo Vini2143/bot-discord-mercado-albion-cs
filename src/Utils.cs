@@ -34,10 +34,16 @@ namespace Bot.Utils
         public required string Code { get; set; }
         public required string Tier { get; set; }
     }
+    public sealed class Recipe
+    {
+        public required string Code { get; set; }
+        public required Dictionary<string, string> Craft { get; set; }
+    }
 
     public sealed partial class Functions
     {   
-        private static readonly IEnumerable<Item> items = JsonConvert.DeserializeObject<IEnumerable<Item>>(File.ReadAllText("./src/data/ItemsData.json"))!;
+        private static readonly Dictionary<string, Item> itemsData = JsonConvert.DeserializeObject<Dictionary<string, Item>>(File.ReadAllText("./src/data/ItemsData.json"))!;
+        private static readonly Dictionary<string, Recipe> recipesData = JsonConvert.DeserializeObject<Dictionary<string, Recipe>>(File.ReadAllText("./src/data/RecipesData.json"))!;
         private static readonly Dictionary<int, string> qualitiesName = new()
         {
             {1, "Normal"},
@@ -61,16 +67,25 @@ namespace Bot.Utils
 
             if (inputTiers.Any())
             {
-                result = from item in items
-                    where item.Name.Contains(input, StringComparison.OrdinalIgnoreCase) && inputTiers.Contains(item.Tier)
-                    select item;
+                result = from item in itemsData
+                    where item.Value.Name.Contains(input, StringComparison.OrdinalIgnoreCase) && inputTiers.Contains(item.Value.Tier)
+                    select item.Value;
                 return;
             }
         
-            result = from item in items
-                where item.Name.Contains(input, StringComparison.OrdinalIgnoreCase) 
-                select item;
+            result = from item in itemsData
+                where item.Value.Name.Contains(input, StringComparison.OrdinalIgnoreCase) 
+                select item.Value;
             return;
+        }
+
+        public static Recipe SearchRecipe(IEnumerable<Item> items, out IEnumerable<Item> ingredients)
+        {
+            var recipe = items.Where(item => recipesData.ContainsKey(item.Code)).Select(item => recipesData[item.Code]).First();
+            IEnumerable<string> ingredientsCodes = [recipe.Code, ..recipe.Craft.Keys];
+            ingredients = ingredientsCodes.Select(itemCode => itemsData[itemCode]);
+            
+            return recipe;
         }
 
         public static async Task<Dictionary<string, List<List<string>>>> RequestItem(IEnumerable<Item> items, IEnumerable<string> inputQualities)
