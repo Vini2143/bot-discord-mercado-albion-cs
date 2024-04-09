@@ -37,7 +37,7 @@ namespace Bot.Utils
     public sealed class Recipe
     {
         public required string Code { get; set; }
-        public required Dictionary<string, string> Craft { get; set; }
+        public required Dictionary<string, int> Craft { get; set; }
     }
 
     public sealed partial class Functions
@@ -53,7 +53,7 @@ namespace Bot.Utils
             {5, "Obra-Prima"}
         };
         private static readonly Dictionary<string, int> qualitiesCode = qualitiesName.ToDictionary(x => x.Value.ToLower(), x => x.Key);
-
+        private static readonly IEnumerable<string> cities = ["Bridgewatch", "Caerleon", "Fort Sterling", "Lymhurst", "Martlock", "Thetford"];
         public static void SearchItem(string input, out IEnumerable<Item> result,  out IEnumerable<string> inputQualities)
         {
             var inputInfos = TierAndQualityRegex().Matches(input);
@@ -79,21 +79,19 @@ namespace Bot.Utils
             return;
         }
 
-        public static Recipe SearchRecipe(IEnumerable<Item> items, out IEnumerable<Item> ingredients)
+        public static void SearchItemRecipe(IEnumerable<Item> items, out Recipe recipe, out IEnumerable<Item> recipeItems)
         {
-            var recipe = items.Where(item => recipesData.ContainsKey(item.Code)).Select(item => recipesData[item.Code]).First();
-            IEnumerable<string> ingredientsCodes = [recipe.Code, ..recipe.Craft.Keys];
-            ingredients = ingredientsCodes.Select(itemCode => itemsData[itemCode]);
-            
-            return recipe;
+            recipe = items.Where(item => recipesData.ContainsKey(item.Code)).Select(item => recipesData[item.Code]).First();
+            IEnumerable<string> recipeItemsCodes = [ recipe.Code, ..recipe.Craft.Keys ]; 
+            recipeItems = recipeItemsCodes.Select(itemCode => itemsData[itemCode]);
         }
 
         public static async Task<Dictionary<string, List<List<string>>>> RequestItem(IEnumerable<Item> items, IEnumerable<string> inputQualities)
         {   
 
-            Dictionary<string, string> codeDict = items.Select(item => item).ToDictionary(item => item.Code, item => $"{NamesRegex().Replace(item.Name, "")} {item.Tier}");
+            Dictionary<string, string> nameDict = items.Select(item => item).ToDictionary(item => item.Code, item => $"{NamesRegex().Replace(item.Name, "")} {item.Tier}");
 
-            string apiUrl = $"https://west.albion-online-data.com/api/v2/stats/prices/{string.Join(",", codeDict.Keys)}";
+            string apiUrl = $"https://west.albion-online-data.com/api/v2/stats/prices/{string.Join(",", nameDict.Keys)}";
 
             if(inputQualities.Any())
             {
@@ -115,19 +113,22 @@ namespace Bot.Utils
                 DateTime now = DateTime.UtcNow;
 
                 var result = from item in list
-                    where (now - item.SellPriceMinDate).TotalHours <= 12
+                    where cities.Contains(item.City)
+                    orderby item.SellPriceMin ascending
                     select item;                   
                 
                 Dictionary<string, List<List<string>>> data = [];
 
                 foreach (var item in result) {
-                    if(!data.ContainsKey(codeDict[item.ItemId])){
-                        data[codeDict[item.ItemId]] = [[], [], []];
+                    if(!data.ContainsKey(item.ItemId)){
+                        data[item.ItemId] = [[], [], [], [], []];
                     }
-
-                    data[codeDict[item.ItemId]][0].Add(item.SellPriceMin.ToString());
-                    data[codeDict[item.ItemId]][1].Add($"{qualitiesName[item.Quality]}");
-                    data[codeDict[item.ItemId]][2].Add($"{item.City} há {(now - item.SellPriceMinDate).Hours:D2}:{(now - item.SellPriceMinDate).Minutes:D2} atrás");
+                    
+                    data[item.ItemId][0].Add(nameDict[item.ItemId]);
+                    data[item.ItemId][1].Add(item.SellPriceMin.ToString());
+                    data[item.ItemId][2].Add($"{qualitiesName[item.Quality]}");
+                    data[item.ItemId][3].Add(item.City);
+                    data[item.ItemId][4].Add($"há {(now - item.SellPriceMinDate).Hours:D2}:{(now - item.SellPriceMinDate).Minutes:D2} atrás");
                 }
 
                 return data;
