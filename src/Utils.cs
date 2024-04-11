@@ -1,5 +1,7 @@
+using System.Collections.Immutable;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using Sprache;
 
 namespace Bot.Utils
 {   
@@ -34,16 +36,11 @@ namespace Bot.Utils
         public required string Code { get; set; }
         public required string Tier { get; set; }
     }
-    public sealed class Recipe
-    {
-        public required string Code { get; set; }
-        public required Dictionary<string, int> Craft { get; set; }
-    }
 
     public sealed partial class Functions
     {   
         private static readonly Dictionary<string, Item> itemsData = JsonConvert.DeserializeObject<Dictionary<string, Item>>(File.ReadAllText("./src/data/ItemsData.json"))!;
-        private static readonly Dictionary<string, Recipe> recipesData = JsonConvert.DeserializeObject<Dictionary<string, Recipe>>(File.ReadAllText("./src/data/RecipesData.json"))!;
+        private static readonly Dictionary<string, Dictionary<string, int>> recipesData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, int>>>(File.ReadAllText("./src/data/RecipesData.json"))!;
         private static readonly Dictionary<int, string> qualitiesName = new()
         {
             {1, "Normal"},
@@ -54,19 +51,23 @@ namespace Bot.Utils
         };
         private static readonly Dictionary<string, int> qualitiesCode = qualitiesName.ToDictionary(x => x.Value.ToLower(), x => x.Key);
         private static readonly IEnumerable<string> cities = ["Bridgewatch", "Caerleon", "Fort Sterling", "Lymhurst", "Martlock", "Thetford"];
+        
+        public static Item GetItem(string code)
+        {
+            return itemsData[code];
+        }
         public static void SearchItem(string input, out IEnumerable<Item> result,  out IEnumerable<string> inputQualities)
         {
-            var inputInfos = TierAndQualityRegex().Matches(input);
             
-            var inputTiers = inputInfos.Select(info => info.Groups[1].Value);
-            inputQualities = inputInfos.Select(info => info.Groups[2].Value.ToLower());
+            var inputTiers = TierRegex().Matches(input).Select(match => match.Value);
+            inputQualities = QualityRegex().Matches(input).Select(match => match.Value.ToLower());
 
-            input = TierAndQualityRegex().Replace(input, "");
+            input = QualityRegex().Replace(input, "");
             input = CharRegex().Replace(input, "");
             input = input.Trim();
 
             if (inputTiers.Any())
-            {
+            {   
                 result = from item in itemsData
                     where item.Value.Name.Contains(input, StringComparison.OrdinalIgnoreCase) && inputTiers.Contains(item.Value.Tier)
                     select item.Value;
@@ -79,14 +80,13 @@ namespace Bot.Utils
             return;
         }
 
-        public static void SearchItemRecipe(IEnumerable<Item> items, out Recipe recipe, out IEnumerable<Item> recipeItems)
-        {
+        public static void SearchItemRecipe(IEnumerable<Item> items, out Dictionary<string, int> recipe, out IEnumerable<Item> recipeItems)
+        {   
             recipe = items.Where(item => recipesData.ContainsKey(item.Code)).Select(item => recipesData[item.Code]).First();
-            IEnumerable<string> recipeItemsCodes = [ recipe.Code, ..recipe.Craft.Keys ]; 
-            recipeItems = recipeItemsCodes.Select(itemCode => itemsData[itemCode]);
+            recipeItems = recipe.Keys.Select(itemCode => itemsData[itemCode]);
         }
 
-        public static async Task<Dictionary<string, List<List<string>>>> RequestItem(IEnumerable<Item> items, IEnumerable<string> inputQualities)
+        public static async Task<Dictionary<string, List<List<string>>>> RequestItem(IEnumerable<Item> items, IEnumerable<string> inputQualities, bool filterIsOn = false)
         {   
 
             Dictionary<string, string> nameDict = items.Select(item => item).ToDictionary(item => item.Code, item => $"{NamesRegex().Replace(item.Name, "")} {item.Tier}");
@@ -111,24 +111,33 @@ namespace Bot.Utils
                 IEnumerable<MarketData> list = JsonConvert.DeserializeObject<IEnumerable<MarketData>>(responseBody)!;
 
                 DateTime now = DateTime.UtcNow;
+                IEnumerable<MarketData> result;
 
-                var result = from item in list
+                if (filterIsOn)
+                {
+                    result = from item in list
+                    where cities.Contains(item.City) && item.SellPriceMin != 0
+                    orderby item.SellPriceMin ascending
+                    select item;     
+
+                } else {
+                    result = from item in list
                     where cities.Contains(item.City)
                     orderby item.SellPriceMin ascending
-                    select item;                   
-                
+                    select item; 
+                }
+
                 Dictionary<string, List<List<string>>> data = [];
 
                 foreach (var item in result) {
                     if(!data.ContainsKey(item.ItemId)){
-                        data[item.ItemId] = [[], [], [], [], []];
+                        data[item.ItemId] = [[], [], [], []];
                     }
                     
-                    data[item.ItemId][0].Add(nameDict[item.ItemId]);
-                    data[item.ItemId][1].Add(item.SellPriceMin.ToString());
-                    data[item.ItemId][2].Add($"{qualitiesName[item.Quality]}");
-                    data[item.ItemId][3].Add(item.City);
-                    data[item.ItemId][4].Add($"há {(now - item.SellPriceMinDate).Hours:D2}:{(now - item.SellPriceMinDate).Minutes:D2} atrás");
+                    data[item.ItemId][0].Add(item.SellPriceMin.ToString());
+                    data[item.ItemId][1].Add($"{qualitiesName[item.Quality]}");
+                    data[item.ItemId][2].Add(item.City);
+                    data[item.ItemId][3].Add($"há {(now - item.SellPriceMinDate).Hours:D2}:{(now - item.SellPriceMinDate).Minutes:D2} atrás");
                 }
 
                 return data;
@@ -136,7 +145,7 @@ namespace Bot.Utils
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Ocorreu um erro: " + ex.Message);
+                Console.WriteLine("Ocorreu um erro: " + ex.ToString());
                 return [];
             }
         }
@@ -145,8 +154,10 @@ namespace Bot.Utils
         private static partial Regex CharRegex();
         [GeneratedRegex(@"\sdo\s(Novato|Iniciante|Adepto|Perito|Mestre|Grão-mestre|Ancião)")]
         private static partial Regex NamesRegex();
-        [GeneratedRegex(@"(\d.\d)*(Normal|Bom|Exepcional|Excelente|Obra-Prima)*", RegexOptions.IgnoreCase)]
-        private static partial Regex TierAndQualityRegex();
+        [GeneratedRegex(@"(\d.\d)")]
+        private static partial Regex TierRegex();
+        [GeneratedRegex(@"(Normal|Bom|Exepcional|Excelente|Obra-Prima)", RegexOptions.IgnoreCase)]
+        private static partial Regex QualityRegex();
 
     }
 }
