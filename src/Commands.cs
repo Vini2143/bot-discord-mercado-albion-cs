@@ -14,24 +14,26 @@ namespace Bot.Commands
         [SlashCommand("search", "Busca um item pelo nome")]
         public async Task SearchCommand(InteractionContext ctx, [Option("busca", "Nome do item")] string input)
         {   
-            Functions.SearchItem(input, out var inputItems, out var inputQualities);
-            var requestResult = await Functions.RequestItem(inputItems, inputQualities, true);
-
-            if (requestResult.Count == 0) 
+            try
             {
-                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Sem resultados!"));
-                return;
-            }
+                Functions.SearchItem(input, out var inputItems, out var inputQualities);
+                var requestResult = await Functions.RequestItem(inputItems, inputQualities, true);
 
-            var interactivity = ctx.Client.GetInteractivity();
+                if (requestResult.Count == 0) 
+                {
+                    await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Sem resultados!"));
+                    return;
+                }
 
-            List<Page> pages = [];
+                var interactivity = ctx.Client.GetInteractivity();
 
-            try {
+                List<Page> pages = [];
+
+            
                 foreach (var item in requestResult)
                 {
                     var page = new Page("", new DiscordEmbedBuilder() 
-                        .WithTitle(Functions.GetItem(item.Key).Name)
+                        .WithTitle($"{Functions.GetItem(item.Key).Name} {Functions.GetItem(item.Key).Tier}")
                         .AddField("Preço", string.Join('\n', item.Value[0]), true)
                         .AddField("Qualidade", string.Join('\n', item.Value[1]), true)
                         .AddField("Localização", string.Join('\n', item.Value[2]), true));
@@ -52,22 +54,23 @@ namespace Bot.Commands
         [SlashCommand("profitas", "Calcula o lucro")]
         public async Task ProfitasCommand(InteractionContext ctx, [Option("item", "Nome do item")] string input)
         {
-            Functions.SearchItem(input, out var inputItems, out var inputQualities);
-            Functions.SearchItemRecipe(inputItems,out var recipe, out var recipeItems);
-            
-            var requestResult = await Functions.RequestItem(recipeItems, []);
-
-            if (requestResult.Count == 0) 
+            try
             {
-                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Sem resultados!"));
-                return;
-            }
+                Functions.SearchItem(input, out var inputItems, out var inputQualities);
+                Functions.SearchItemRecipe(inputItems,out var recipe, out var recipeItems);
+                
+                var requestResult = await Functions.RequestItem(recipeItems, []);
 
-            var interactivity = ctx.Client.GetInteractivity();
+                if (requestResult.Count == 0) 
+                {
+                    await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Sem resultados!"));
+                    return;
+                }
 
-            List<Page> pages = [];
+                var interactivity = ctx.Client.GetInteractivity();
 
-            try {
+                List<Page> pages = [];
+
                 for(int index = 0; index <= 5; index++)
                 {
                     var item = recipe.First();
