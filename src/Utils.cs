@@ -71,9 +71,19 @@ namespace Bot.Utils
         public static void SearchItem(string input, out IEnumerable<Item> result,  out IEnumerable<int> inputQualities)
         {
             
-            var inputTiers = TierRegex().Matches(input).Select(match => match.Value);
+            var inputTiers = TierRegex().Matches(input).Select(match => {
+                string tier = match.Groups["tier"].Value;
+                string enchant = match.Groups["enchant"].Value switch
+                {
+                    "" => ".0",
+                    _ => match.Groups["enchant"].Value,
+                };
+                
+                return $"{tier}{enchant}";
+            });
             inputQualities = QualityRegex().Matches(input).Select(match => qualitiesCode[match.Value.ToLower()]);
-
+            
+            input = TierRegex().Replace(input, "");
             input = QualityRegex().Replace(input, "");
             input = CharRegex().Replace(input, "");
             input = input.Trim();
@@ -166,7 +176,7 @@ namespace Bot.Utils
         private static partial Regex CharRegex();
         /* [GeneratedRegex(@"\sdo\s(Novato|Iniciante|Adepto|Perito|Mestre|Grão-mestre|Ancião)")]
         private static partial Regex NamesRegex(); */
-        [GeneratedRegex(@"([1-8].[0-4])", RegexOptions.IgnoreCase)]
+        [GeneratedRegex(@"t?(?<tier>[1-8])(?<enchant>.[0-4])?", RegexOptions.IgnoreCase)]
         private static partial Regex TierRegex();
         [GeneratedRegex(@"(Normal|Bom|Excepcional|Excelente|Obra-Prima|Obra Prima|Excep|Excel|Exp|Exc)", RegexOptions.IgnoreCase)]
         private static partial Regex QualityRegex();
