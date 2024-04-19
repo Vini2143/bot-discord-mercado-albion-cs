@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Immutable;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
@@ -133,21 +134,19 @@ namespace Bot.Utils
                 IEnumerable<MarketData> list = JsonConvert.DeserializeObject<IEnumerable<MarketData>>(responseBody)!;
 
                 DateTime now = DateTime.UtcNow;
-                IEnumerable<MarketData> result;
 
-                if (filterIsOn)
+                IEnumerable<MarketData> result = filterIsOn switch
                 {
-                    result = from item in list
-                    where cities.Contains(item.City) && item.SellPriceMin != 0
-                    orderby item.SellPriceMin ascending
-                    select item;     
-
-                } else {
-                    result = from item in list
-                    where cities.Contains(item.City)
-                    orderby item.SellPriceMin ascending
-                    select item; 
-                }
+                    true => from item in list
+                        where cities.Contains(item.City) && item.SellPriceMin != 0
+                        orderby item.SellPriceMin ascending
+                        select item,
+                    
+                    _ => from item in list
+                        where cities.Contains(item.City)
+                        orderby item.SellPriceMin ascending
+                        select item,
+                };
 
                 Dictionary<string, List<List<string>>> data = [];
 
