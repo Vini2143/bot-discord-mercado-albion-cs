@@ -63,8 +63,18 @@ namespace Bot.Utils
             {"excep", 3},
             {"excel", 4},
         };
-        private static readonly IEnumerable<string> cities = ["Bridgewatch", "Caerleon", "Fort Sterling", "Lymhurst", "Martlock", "Thetford"];
-        
+        private static readonly Dictionary<string, string> cities = new()
+        {
+            {"Bridgewatch", "Bridgewatch"},
+            {"Caerleon", "Caerleon"},
+            {"Fort Sterling", "Fort Sterling"},
+            {"Lymhurst", "Lymhurst"},
+            {"Martlock", "Martlock"},
+            {"Thetford", "Thetford"},
+            {"Black Market", "Black Market"},
+            {"5003", "Brecilien"},
+        };
+            
         public static Item GetItem(string code)
         {
             return itemsData[code];
@@ -109,7 +119,7 @@ namespace Bot.Utils
             recipeItems = recipe.Keys.Select(itemCode => itemsData[itemCode]);
         }
 
-        public static async Task<Dictionary<string, List<List<string>>>> RequestItem(IEnumerable<Item> items, IEnumerable<int> inputQualities, bool filterIsOn = false)
+        public static async Task<Dictionary<string, List<List<string>>>> RequestItem(IEnumerable<Item> items, IEnumerable<int> inputQualities, string? filterOfSearch = null)
         {   
 
             //Dictionary<string, string> nameDict = items.Select(item => item).ToDictionary(item => item.Code, item => $"{NamesRegex().Replace(item.Name, "")} {item.Tier}");
@@ -135,15 +145,20 @@ namespace Bot.Utils
 
                 DateTime now = DateTime.UtcNow;
 
-                IEnumerable<MarketData> result = filterIsOn switch
+                IEnumerable<MarketData> result = filterOfSearch switch
                 {
-                    true => from item in list
-                        where cities.Contains(item.City) && item.SellPriceMin != 0
+                    "sell" => from item in list
+                        where cities.ContainsKey(item.City) && item.SellPriceMin != 0
                         orderby item.SellPriceMin ascending
                         select item,
                     
+                    "buy" => from item in list
+                        where cities.ContainsKey(item.City) && item.BuyPriceMin != 0
+                        orderby item.BuyPriceMax descending
+                        select item,
+                    
                     _ => from item in list
-                        where cities.Contains(item.City)
+                        where cities.ContainsKey(item.City)
                         orderby item.SellPriceMin ascending
                         select item,
                 };
@@ -151,14 +166,20 @@ namespace Bot.Utils
                 Dictionary<string, List<List<string>>> data = [];
 
                 foreach (var item in result) {
-                    if(!data.ContainsKey(item.ItemId)){
-                        data[item.ItemId] = [[], [], [], []];
+                    if(!data.TryGetValue(item.ItemId, out List<List<string>>? value))
+                    {
+                        value = ([[], [], [], [], [], []]);
+                        data[item.ItemId] = value;
                     }
                     
-                    data[item.ItemId][0].Add(item.SellPriceMin.ToString());
-                    data[item.ItemId][1].Add($"{qualitiesName[item.Quality]}");
-                    data[item.ItemId][2].Add(item.City);
-                    data[item.ItemId][3].Add($"há {(now - item.SellPriceMinDate).Hours:D2}:{(now - item.SellPriceMinDate).Minutes:D2} atrás");
+                    value[0].Add(cities[item.City]);
+                    value[1].Add($"{qualitiesName[item.Quality]}");
+
+                    value[2].Add(item.SellPriceMin.ToString());
+                    value[3].Add(item.BuyPriceMax.ToString());
+                    
+                    value[4].Add($"há {(now - item.SellPriceMinDate).Hours:D2}:{(now - item.SellPriceMinDate).Minutes:D2} atrás");
+                    value[5].Add($"há {(now - item.BuyPriceMaxDate).Hours:D2}:{(now - item.BuyPriceMaxDate).Minutes:D2} atrás");
                 }
 
                 return data;

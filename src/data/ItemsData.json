@@ -280,7 +280,7 @@
     "Tier": "8.0"
   },
   "T8_FARM_RABBIT_EASTER_BABY_DARK": {
-    "Name": "Ovo de Cauda-de-Algodão Assustador",
+    "Name": "Ovo Misterioso de Cauda-de-Algodão",
     "Code": "T8_FARM_RABBIT_EASTER_BABY_DARK",
     "Tier": "8.0"
   },
@@ -6062,6 +6062,81 @@
   "T8_ARTEFACT_MAIN_SWORD_CRYSTAL": {
     "Name": "Cristal Infinito do Ancião",
     "Code": "T8_ARTEFACT_MAIN_SWORD_CRYSTAL",
+    "Tier": "8.0"
+  },
+  "T4_ARTEFACT_2H_DOUBLEBLADEDSTAFF_CRYSTAL": {
+    "Name": "Cristal Ilusório do Adepto",
+    "Code": "T4_ARTEFACT_2H_DOUBLEBLADEDSTAFF_CRYSTAL",
+    "Tier": "4.0"
+  },
+  "T5_ARTEFACT_2H_DOUBLEBLADEDSTAFF_CRYSTAL": {
+    "Name": "Cristal Ilusório do Perito",
+    "Code": "T5_ARTEFACT_2H_DOUBLEBLADEDSTAFF_CRYSTAL",
+    "Tier": "5.0"
+  },
+  "T6_ARTEFACT_2H_DOUBLEBLADEDSTAFF_CRYSTAL": {
+    "Name": "Cristal Ilusório do Mestre",
+    "Code": "T6_ARTEFACT_2H_DOUBLEBLADEDSTAFF_CRYSTAL",
+    "Tier": "6.0"
+  },
+  "T7_ARTEFACT_2H_DOUBLEBLADEDSTAFF_CRYSTAL": {
+    "Name": "Cristal Ilusório do Grão-mestre",
+    "Code": "T7_ARTEFACT_2H_DOUBLEBLADEDSTAFF_CRYSTAL",
+    "Tier": "7.0"
+  },
+  "T8_ARTEFACT_2H_DOUBLEBLADEDSTAFF_CRYSTAL": {
+    "Name": "Cristal Ilusório do Ancião",
+    "Code": "T8_ARTEFACT_2H_DOUBLEBLADEDSTAFF_CRYSTAL",
+    "Tier": "8.0"
+  },
+  "T4_ARTEFACT_2H_FROSTSTAFF_CRYSTAL": {
+    "Name": "Cristal Gelado do Adepto",
+    "Code": "T4_ARTEFACT_2H_FROSTSTAFF_CRYSTAL",
+    "Tier": "4.0"
+  },
+  "T5_ARTEFACT_2H_FROSTSTAFF_CRYSTAL": {
+    "Name": "Cristal Gelado do Perito",
+    "Code": "T5_ARTEFACT_2H_FROSTSTAFF_CRYSTAL",
+    "Tier": "5.0"
+  },
+  "T6_ARTEFACT_2H_FROSTSTAFF_CRYSTAL": {
+    "Name": "Cristal Gelado do Mestre",
+    "Code": "T6_ARTEFACT_2H_FROSTSTAFF_CRYSTAL",
+    "Tier": "6.0"
+  },
+  "T7_ARTEFACT_2H_FROSTSTAFF_CRYSTAL": {
+    "Name": "Cristal Gelado do Grão-mestre",
+    "Code": "T7_ARTEFACT_2H_FROSTSTAFF_CRYSTAL",
+    "Tier": "7.0"
+  },
+  "T8_ARTEFACT_2H_FROSTSTAFF_CRYSTAL": {
+    "Name": "Cristal Gelado do Ancião",
+    "Code": "T8_ARTEFACT_2H_FROSTSTAFF_CRYSTAL",
+    "Tier": "8.0"
+  },
+  "T4_ARTEFACT_2H_SCYTHE_CRYSTAL": {
+    "Name": "Cristal Afiado do Adepto",
+    "Code": "T4_ARTEFACT_2H_SCYTHE_CRYSTAL",
+    "Tier": "4.0"
+  },
+  "T5_ARTEFACT_2H_SCYTHE_CRYSTAL": {
+    "Name": "Cristal Afiado do Perito",
+    "Code": "T5_ARTEFACT_2H_SCYTHE_CRYSTAL",
+    "Tier": "5.0"
+  },
+  "T6_ARTEFACT_2H_SCYTHE_CRYSTAL": {
+    "Name": "Cristal Afiado do Mestre",
+    "Code": "T6_ARTEFACT_2H_SCYTHE_CRYSTAL",
+    "Tier": "6.0"
+  },
+  "T7_ARTEFACT_2H_SCYTHE_CRYSTAL": {
+    "Name": "Cristal Afiado do Grão-mestre",
+    "Code": "T7_ARTEFACT_2H_SCYTHE_CRYSTAL",
+    "Tier": "7.0"
+  },
+  "T8_ARTEFACT_2H_SCYTHE_CRYSTAL": {
+    "Name": "Cristal Afiado do Ancião",
+    "Code": "T8_ARTEFACT_2H_SCYTHE_CRYSTAL",
     "Tier": "8.0"
   },
   "T4_ARTEFACT_OFF_TOWERSHIELD_UNDEAD": {
@@ -12180,62 +12255,62 @@
     "Tier": "8.0"
   },
   "T2_2H_TOOL_SIEGEHAMMER": {
-    "Name": "Martelo de Demolição do Novato",
+    "Name": "Martelo de Cerco do Novato",
     "Code": "T2_2H_TOOL_SIEGEHAMMER",
     "Tier": "2.0"
   },
   "T3_2H_TOOL_SIEGEHAMMER": {
-    "Name": "Martelo de Demolição do Iniciante",
+    "Name": "Martelo de Cerco do Iniciante",
     "Code": "T3_2H_TOOL_SIEGEHAMMER",
     "Tier": "3.0"
   },
   "T4_2H_TOOL_SIEGEHAMMER": {
-    "Name": "Martelo de Demolição do Adepto",
+    "Name": "Martelo de Cerco do Adepto",
     "Code": "T4_2H_TOOL_SIEGEHAMMER",
     "Tier": "4.0"
   },
   "T5_2H_TOOL_SIEGEHAMMER": {
-    "Name": "Martelo de Demolição do Perito",
+    "Name": "Martelo de Cerco do Perito",
     "Code": "T5_2H_TOOL_SIEGEHAMMER",
     "Tier": "5.0"
   },
   "T6_2H_TOOL_SIEGEHAMMER": {
-    "Name": "Martelo de Demolição do Mestre",
+    "Name": "Martelo de Cerco do Mestre",
     "Code": "T6_2H_TOOL_SIEGEHAMMER",
     "Tier": "6.0"
   },
   "T7_2H_TOOL_SIEGEHAMMER": {
-    "Name": "Martelo de Demolição do Grão-mestre",
+    "Name": "Martelo de Cerco do Grão-mestre",
     "Code": "T7_2H_TOOL_SIEGEHAMMER",
     "Tier": "7.0"
   },
   "T8_2H_TOOL_SIEGEHAMMER": {
-    "Name": "Martelo de Demolição do Ancião",
+    "Name": "Martelo de Cerco do Ancião",
     "Code": "T8_2H_TOOL_SIEGEHAMMER",
     "Tier": "8.0"
   },
   "T4_2H_TOOL_SIEGEHAMMER_AVALON": {
-    "Name": "Martelo de Demolição Avaloniano do Adepto",
+    "Name": "Martelo de Cerco Avaloniano do Adepto",
     "Code": "T4_2H_TOOL_SIEGEHAMMER_AVALON",
     "Tier": "4.0"
   },
   "T5_2H_TOOL_SIEGEHAMMER_AVALON": {
-    "Name": "Martelo de Demolição Avaloniano do Perito",
+    "Name": "Martelo de Cerco Avaloniano do Perito",
     "Code": "T5_2H_TOOL_SIEGEHAMMER_AVALON",
     "Tier": "5.0"
   },
   "T6_2H_TOOL_SIEGEHAMMER_AVALON": {
-    "Name": "Martelo de Demolição Avaloniano do Mestre",
+    "Name": "Martelo de Cerco Avaloniano do Mestre",
     "Code": "T6_2H_TOOL_SIEGEHAMMER_AVALON",
     "Tier": "6.0"
   },
   "T7_2H_TOOL_SIEGEHAMMER_AVALON": {
-    "Name": "Martelo de Demolição Avaloniano do Grão-mestre",
+    "Name": "Martelo de Cerco Avaloniano do Grão-mestre",
     "Code": "T7_2H_TOOL_SIEGEHAMMER_AVALON",
     "Tier": "7.0"
   },
   "T8_2H_TOOL_SIEGEHAMMER_AVALON": {
-    "Name": "Martelo de Demolição Avaloniano do Ancião",
+    "Name": "Martelo de Cerco Avaloniano do Ancião",
     "Code": "T8_2H_TOOL_SIEGEHAMMER_AVALON",
     "Tier": "8.0"
   },
@@ -31489,6 +31564,131 @@
     "Code": "T8_MAIN_FROSTSTAFF_AVALON@4",
     "Tier": "8.4"
   },
+  "T4_2H_FROSTSTAFF_CRYSTAL": {
+    "Name": "Cajado Ártico do Adepto",
+    "Code": "T4_2H_FROSTSTAFF_CRYSTAL",
+    "Tier": "4.0"
+  },
+  "T4_2H_FROSTSTAFF_CRYSTAL@1": {
+    "Name": "Cajado Ártico do Adepto",
+    "Code": "T4_2H_FROSTSTAFF_CRYSTAL@1",
+    "Tier": "4.1"
+  },
+  "T4_2H_FROSTSTAFF_CRYSTAL@2": {
+    "Name": "Cajado Ártico do Adepto",
+    "Code": "T4_2H_FROSTSTAFF_CRYSTAL@2",
+    "Tier": "4.2"
+  },
+  "T4_2H_FROSTSTAFF_CRYSTAL@3": {
+    "Name": "Cajado Ártico do Adepto",
+    "Code": "T4_2H_FROSTSTAFF_CRYSTAL@3",
+    "Tier": "4.3"
+  },
+  "T4_2H_FROSTSTAFF_CRYSTAL@4": {
+    "Name": "Cajado Ártico do Adepto",
+    "Code": "T4_2H_FROSTSTAFF_CRYSTAL@4",
+    "Tier": "4.4"
+  },
+  "T5_2H_FROSTSTAFF_CRYSTAL": {
+    "Name": "Cajado Ártico do Perito",
+    "Code": "T5_2H_FROSTSTAFF_CRYSTAL",
+    "Tier": "5.0"
+  },
+  "T5_2H_FROSTSTAFF_CRYSTAL@1": {
+    "Name": "Cajado Ártico do Perito",
+    "Code": "T5_2H_FROSTSTAFF_CRYSTAL@1",
+    "Tier": "5.1"
+  },
+  "T5_2H_FROSTSTAFF_CRYSTAL@2": {
+    "Name": "Cajado Ártico do Perito",
+    "Code": "T5_2H_FROSTSTAFF_CRYSTAL@2",
+    "Tier": "5.2"
+  },
+  "T5_2H_FROSTSTAFF_CRYSTAL@3": {
+    "Name": "Cajado Ártico do Perito",
+    "Code": "T5_2H_FROSTSTAFF_CRYSTAL@3",
+    "Tier": "5.3"
+  },
+  "T5_2H_FROSTSTAFF_CRYSTAL@4": {
+    "Name": "Cajado Ártico do Perito",
+    "Code": "T5_2H_FROSTSTAFF_CRYSTAL@4",
+    "Tier": "5.4"
+  },
+  "T6_2H_FROSTSTAFF_CRYSTAL": {
+    "Name": "Cajado Ártico do Mestre",
+    "Code": "T6_2H_FROSTSTAFF_CRYSTAL",
+    "Tier": "6.0"
+  },
+  "T6_2H_FROSTSTAFF_CRYSTAL@1": {
+    "Name": "Cajado Ártico do Mestre",
+    "Code": "T6_2H_FROSTSTAFF_CRYSTAL@1",
+    "Tier": "6.1"
+  },
+  "T6_2H_FROSTSTAFF_CRYSTAL@2": {
+    "Name": "Cajado Ártico do Mestre",
+    "Code": "T6_2H_FROSTSTAFF_CRYSTAL@2",
+    "Tier": "6.2"
+  },
+  "T6_2H_FROSTSTAFF_CRYSTAL@3": {
+    "Name": "Cajado Ártico do Mestre",
+    "Code": "T6_2H_FROSTSTAFF_CRYSTAL@3",
+    "Tier": "6.3"
+  },
+  "T6_2H_FROSTSTAFF_CRYSTAL@4": {
+    "Name": "Cajado Ártico do Mestre",
+    "Code": "T6_2H_FROSTSTAFF_CRYSTAL@4",
+    "Tier": "6.4"
+  },
+  "T7_2H_FROSTSTAFF_CRYSTAL": {
+    "Name": "Cajado Ártico do Grão-mestre",
+    "Code": "T7_2H_FROSTSTAFF_CRYSTAL",
+    "Tier": "7.0"
+  },
+  "T7_2H_FROSTSTAFF_CRYSTAL@1": {
+    "Name": "Cajado Ártico do Grão-mestre",
+    "Code": "T7_2H_FROSTSTAFF_CRYSTAL@1",
+    "Tier": "7.1"
+  },
+  "T7_2H_FROSTSTAFF_CRYSTAL@2": {
+    "Name": "Cajado Ártico do Grão-mestre",
+    "Code": "T7_2H_FROSTSTAFF_CRYSTAL@2",
+    "Tier": "7.2"
+  },
+  "T7_2H_FROSTSTAFF_CRYSTAL@3": {
+    "Name": "Cajado Ártico do Grão-mestre",
+    "Code": "T7_2H_FROSTSTAFF_CRYSTAL@3",
+    "Tier": "7.3"
+  },
+  "T7_2H_FROSTSTAFF_CRYSTAL@4": {
+    "Name": "Cajado Ártico do Grão-mestre",
+    "Code": "T7_2H_FROSTSTAFF_CRYSTAL@4",
+    "Tier": "7.4"
+  },
+  "T8_2H_FROSTSTAFF_CRYSTAL": {
+    "Name": "Cajado Ártico do Ancião",
+    "Code": "T8_2H_FROSTSTAFF_CRYSTAL",
+    "Tier": "8.0"
+  },
+  "T8_2H_FROSTSTAFF_CRYSTAL@1": {
+    "Name": "Cajado Ártico do Ancião",
+    "Code": "T8_2H_FROSTSTAFF_CRYSTAL@1",
+    "Tier": "8.1"
+  },
+  "T8_2H_FROSTSTAFF_CRYSTAL@2": {
+    "Name": "Cajado Ártico do Ancião",
+    "Code": "T8_2H_FROSTSTAFF_CRYSTAL@2",
+    "Tier": "8.2"
+  },
+  "T8_2H_FROSTSTAFF_CRYSTAL@3": {
+    "Name": "Cajado Ártico do Ancião",
+    "Code": "T8_2H_FROSTSTAFF_CRYSTAL@3",
+    "Tier": "8.3"
+  },
+  "T8_2H_FROSTSTAFF_CRYSTAL@4": {
+    "Name": "Cajado Ártico do Ancião",
+    "Code": "T8_2H_FROSTSTAFF_CRYSTAL@4",
+    "Tier": "8.4"
+  },
   "T3_MAIN_ARCANESTAFF": {
     "Name": "Cajado Arcano do Iniciante",
     "Code": "T3_MAIN_ARCANESTAFF",
@@ -37119,6 +37319,131 @@
     "Code": "T8_2H_AXE_AVALON@4",
     "Tier": "8.4"
   },
+  "T4_2H_SCYTHE_CRYSTAL": {
+    "Name": "Foice de Cristal do Adepto",
+    "Code": "T4_2H_SCYTHE_CRYSTAL",
+    "Tier": "4.0"
+  },
+  "T4_2H_SCYTHE_CRYSTAL@1": {
+    "Name": "Foice de Cristal do Adepto",
+    "Code": "T4_2H_SCYTHE_CRYSTAL@1",
+    "Tier": "4.1"
+  },
+  "T4_2H_SCYTHE_CRYSTAL@2": {
+    "Name": "Foice de Cristal do Adepto",
+    "Code": "T4_2H_SCYTHE_CRYSTAL@2",
+    "Tier": "4.2"
+  },
+  "T4_2H_SCYTHE_CRYSTAL@3": {
+    "Name": "Foice de Cristal do Adepto",
+    "Code": "T4_2H_SCYTHE_CRYSTAL@3",
+    "Tier": "4.3"
+  },
+  "T4_2H_SCYTHE_CRYSTAL@4": {
+    "Name": "Foice de Cristal do Adepto",
+    "Code": "T4_2H_SCYTHE_CRYSTAL@4",
+    "Tier": "4.4"
+  },
+  "T5_2H_SCYTHE_CRYSTAL": {
+    "Name": "Foice de Cristal do Perito",
+    "Code": "T5_2H_SCYTHE_CRYSTAL",
+    "Tier": "5.0"
+  },
+  "T5_2H_SCYTHE_CRYSTAL@1": {
+    "Name": "Foice de Cristal do Perito",
+    "Code": "T5_2H_SCYTHE_CRYSTAL@1",
+    "Tier": "5.1"
+  },
+  "T5_2H_SCYTHE_CRYSTAL@2": {
+    "Name": "Foice de Cristal do Perito",
+    "Code": "T5_2H_SCYTHE_CRYSTAL@2",
+    "Tier": "5.2"
+  },
+  "T5_2H_SCYTHE_CRYSTAL@3": {
+    "Name": "Foice de Cristal do Perito",
+    "Code": "T5_2H_SCYTHE_CRYSTAL@3",
+    "Tier": "5.3"
+  },
+  "T5_2H_SCYTHE_CRYSTAL@4": {
+    "Name": "Foice de Cristal do Perito",
+    "Code": "T5_2H_SCYTHE_CRYSTAL@4",
+    "Tier": "5.4"
+  },
+  "T6_2H_SCYTHE_CRYSTAL": {
+    "Name": "Foice de Cristal do Mestre",
+    "Code": "T6_2H_SCYTHE_CRYSTAL",
+    "Tier": "6.0"
+  },
+  "T6_2H_SCYTHE_CRYSTAL@1": {
+    "Name": "Foice de Cristal do Mestre",
+    "Code": "T6_2H_SCYTHE_CRYSTAL@1",
+    "Tier": "6.1"
+  },
+  "T6_2H_SCYTHE_CRYSTAL@2": {
+    "Name": "Foice de Cristal do Mestre",
+    "Code": "T6_2H_SCYTHE_CRYSTAL@2",
+    "Tier": "6.2"
+  },
+  "T6_2H_SCYTHE_CRYSTAL@3": {
+    "Name": "Foice de Cristal do Mestre",
+    "Code": "T6_2H_SCYTHE_CRYSTAL@3",
+    "Tier": "6.3"
+  },
+  "T6_2H_SCYTHE_CRYSTAL@4": {
+    "Name": "Foice de Cristal do Mestre",
+    "Code": "T6_2H_SCYTHE_CRYSTAL@4",
+    "Tier": "6.4"
+  },
+  "T7_2H_SCYTHE_CRYSTAL": {
+    "Name": "Foice de Cristal do Grão-mestre",
+    "Code": "T7_2H_SCYTHE_CRYSTAL",
+    "Tier": "7.0"
+  },
+  "T7_2H_SCYTHE_CRYSTAL@1": {
+    "Name": "Foice de Cristal do Grão-mestre",
+    "Code": "T7_2H_SCYTHE_CRYSTAL@1",
+    "Tier": "7.1"
+  },
+  "T7_2H_SCYTHE_CRYSTAL@2": {
+    "Name": "Foice de Cristal do Grão-mestre",
+    "Code": "T7_2H_SCYTHE_CRYSTAL@2",
+    "Tier": "7.2"
+  },
+  "T7_2H_SCYTHE_CRYSTAL@3": {
+    "Name": "Foice de Cristal do Grão-mestre",
+    "Code": "T7_2H_SCYTHE_CRYSTAL@3",
+    "Tier": "7.3"
+  },
+  "T7_2H_SCYTHE_CRYSTAL@4": {
+    "Name": "Foice de Cristal do Grão-mestre",
+    "Code": "T7_2H_SCYTHE_CRYSTAL@4",
+    "Tier": "7.4"
+  },
+  "T8_2H_SCYTHE_CRYSTAL": {
+    "Name": "Foice de Cristal do Ancião",
+    "Code": "T8_2H_SCYTHE_CRYSTAL",
+    "Tier": "8.0"
+  },
+  "T8_2H_SCYTHE_CRYSTAL@1": {
+    "Name": "Foice de Cristal do Ancião",
+    "Code": "T8_2H_SCYTHE_CRYSTAL@1",
+    "Tier": "8.1"
+  },
+  "T8_2H_SCYTHE_CRYSTAL@2": {
+    "Name": "Foice de Cristal do Ancião",
+    "Code": "T8_2H_SCYTHE_CRYSTAL@2",
+    "Tier": "8.2"
+  },
+  "T8_2H_SCYTHE_CRYSTAL@3": {
+    "Name": "Foice de Cristal do Ancião",
+    "Code": "T8_2H_SCYTHE_CRYSTAL@3",
+    "Tier": "8.3"
+  },
+  "T8_2H_SCYTHE_CRYSTAL@4": {
+    "Name": "Foice de Cristal do Ancião",
+    "Code": "T8_2H_SCYTHE_CRYSTAL@4",
+    "Tier": "8.4"
+  },
   "T1_MAIN_SWORD": {
     "Name": "Espada Larga do Calouro",
     "Code": "T1_MAIN_SWORD",
@@ -39012,6 +39337,131 @@
   "T8_2H_QUARTERSTAFF_AVALON@4": {
     "Name": "Buscador do Graal do Ancião",
     "Code": "T8_2H_QUARTERSTAFF_AVALON@4",
+    "Tier": "8.4"
+  },
+  "T4_2H_DOUBLEBLADEDSTAFF_CRYSTAL": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Adepto",
+    "Code": "T4_2H_DOUBLEBLADEDSTAFF_CRYSTAL",
+    "Tier": "4.0"
+  },
+  "T4_2H_DOUBLEBLADEDSTAFF_CRYSTAL@1": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Adepto",
+    "Code": "T4_2H_DOUBLEBLADEDSTAFF_CRYSTAL@1",
+    "Tier": "4.1"
+  },
+  "T4_2H_DOUBLEBLADEDSTAFF_CRYSTAL@2": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Adepto",
+    "Code": "T4_2H_DOUBLEBLADEDSTAFF_CRYSTAL@2",
+    "Tier": "4.2"
+  },
+  "T4_2H_DOUBLEBLADEDSTAFF_CRYSTAL@3": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Adepto",
+    "Code": "T4_2H_DOUBLEBLADEDSTAFF_CRYSTAL@3",
+    "Tier": "4.3"
+  },
+  "T4_2H_DOUBLEBLADEDSTAFF_CRYSTAL@4": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Adepto",
+    "Code": "T4_2H_DOUBLEBLADEDSTAFF_CRYSTAL@4",
+    "Tier": "4.4"
+  },
+  "T5_2H_DOUBLEBLADEDSTAFF_CRYSTAL": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Perito",
+    "Code": "T5_2H_DOUBLEBLADEDSTAFF_CRYSTAL",
+    "Tier": "5.0"
+  },
+  "T5_2H_DOUBLEBLADEDSTAFF_CRYSTAL@1": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Perito",
+    "Code": "T5_2H_DOUBLEBLADEDSTAFF_CRYSTAL@1",
+    "Tier": "5.1"
+  },
+  "T5_2H_DOUBLEBLADEDSTAFF_CRYSTAL@2": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Perito",
+    "Code": "T5_2H_DOUBLEBLADEDSTAFF_CRYSTAL@2",
+    "Tier": "5.2"
+  },
+  "T5_2H_DOUBLEBLADEDSTAFF_CRYSTAL@3": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Perito",
+    "Code": "T5_2H_DOUBLEBLADEDSTAFF_CRYSTAL@3",
+    "Tier": "5.3"
+  },
+  "T5_2H_DOUBLEBLADEDSTAFF_CRYSTAL@4": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Perito",
+    "Code": "T5_2H_DOUBLEBLADEDSTAFF_CRYSTAL@4",
+    "Tier": "5.4"
+  },
+  "T6_2H_DOUBLEBLADEDSTAFF_CRYSTAL": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Mestre",
+    "Code": "T6_2H_DOUBLEBLADEDSTAFF_CRYSTAL",
+    "Tier": "6.0"
+  },
+  "T6_2H_DOUBLEBLADEDSTAFF_CRYSTAL@1": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Mestre",
+    "Code": "T6_2H_DOUBLEBLADEDSTAFF_CRYSTAL@1",
+    "Tier": "6.1"
+  },
+  "T6_2H_DOUBLEBLADEDSTAFF_CRYSTAL@2": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Mestre",
+    "Code": "T6_2H_DOUBLEBLADEDSTAFF_CRYSTAL@2",
+    "Tier": "6.2"
+  },
+  "T6_2H_DOUBLEBLADEDSTAFF_CRYSTAL@3": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Mestre",
+    "Code": "T6_2H_DOUBLEBLADEDSTAFF_CRYSTAL@3",
+    "Tier": "6.3"
+  },
+  "T6_2H_DOUBLEBLADEDSTAFF_CRYSTAL@4": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Mestre",
+    "Code": "T6_2H_DOUBLEBLADEDSTAFF_CRYSTAL@4",
+    "Tier": "6.4"
+  },
+  "T7_2H_DOUBLEBLADEDSTAFF_CRYSTAL": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Grão-mestre",
+    "Code": "T7_2H_DOUBLEBLADEDSTAFF_CRYSTAL",
+    "Tier": "7.0"
+  },
+  "T7_2H_DOUBLEBLADEDSTAFF_CRYSTAL@1": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Grão-mestre",
+    "Code": "T7_2H_DOUBLEBLADEDSTAFF_CRYSTAL@1",
+    "Tier": "7.1"
+  },
+  "T7_2H_DOUBLEBLADEDSTAFF_CRYSTAL@2": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Grão-mestre",
+    "Code": "T7_2H_DOUBLEBLADEDSTAFF_CRYSTAL@2",
+    "Tier": "7.2"
+  },
+  "T7_2H_DOUBLEBLADEDSTAFF_CRYSTAL@3": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Grão-mestre",
+    "Code": "T7_2H_DOUBLEBLADEDSTAFF_CRYSTAL@3",
+    "Tier": "7.3"
+  },
+  "T7_2H_DOUBLEBLADEDSTAFF_CRYSTAL@4": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Grão-mestre",
+    "Code": "T7_2H_DOUBLEBLADEDSTAFF_CRYSTAL@4",
+    "Tier": "7.4"
+  },
+  "T8_2H_DOUBLEBLADEDSTAFF_CRYSTAL": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Ancião",
+    "Code": "T8_2H_DOUBLEBLADEDSTAFF_CRYSTAL",
+    "Tier": "8.0"
+  },
+  "T8_2H_DOUBLEBLADEDSTAFF_CRYSTAL@1": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Ancião",
+    "Code": "T8_2H_DOUBLEBLADEDSTAFF_CRYSTAL@1",
+    "Tier": "8.1"
+  },
+  "T8_2H_DOUBLEBLADEDSTAFF_CRYSTAL@2": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Ancião",
+    "Code": "T8_2H_DOUBLEBLADEDSTAFF_CRYSTAL@2",
+    "Tier": "8.2"
+  },
+  "T8_2H_DOUBLEBLADEDSTAFF_CRYSTAL@3": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Ancião",
+    "Code": "T8_2H_DOUBLEBLADEDSTAFF_CRYSTAL@3",
+    "Tier": "8.3"
+  },
+  "T8_2H_DOUBLEBLADEDSTAFF_CRYSTAL@4": {
+    "Name": "Lâminas Gêmeas Fantasmagóricas do Ancião",
+    "Code": "T8_2H_DOUBLEBLADEDSTAFF_CRYSTAL@4",
     "Tier": "8.4"
   },
   "T3_MAIN_HAMMER": {
@@ -44023,6 +44473,31 @@
     "Name": "Carga de Emote de Vitória do Brasão do Console",
     "Code": "T1_KILL_EMOTE_FLAG_CONTROLLER_CHARGES_NONTRADABLE",
     "Tier": "1.0"
+  },
+  "T4_SIEGE_BANNER": {
+    "Name": "Estandarte de Cerco do Adepto",
+    "Code": "T4_SIEGE_BANNER",
+    "Tier": "4.0"
+  },
+  "T5_SIEGE_BANNER": {
+    "Name": "Estandarte de Cerco do Perito",
+    "Code": "T5_SIEGE_BANNER",
+    "Tier": "5.0"
+  },
+  "T6_SIEGE_BANNER": {
+    "Name": "Estandarte de Cerco do Mestre",
+    "Code": "T6_SIEGE_BANNER",
+    "Tier": "6.0"
+  },
+  "T7_SIEGE_BANNER": {
+    "Name": "Estandarte de Cerco do Grão-mestre",
+    "Code": "T7_SIEGE_BANNER",
+    "Tier": "7.0"
+  },
+  "T8_SIEGE_BANNER": {
+    "Name": "Estandarte de Cerco do Ancião",
+    "Code": "T8_SIEGE_BANNER",
+    "Tier": "8.0"
   },
   "T2_JOURNAL_WOOD_EMPTY": {
     "Name": "Diário do Lenhador Novato (Vazio)",

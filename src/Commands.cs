@@ -11,13 +11,53 @@ namespace Bot.Commands
     
     public sealed class Commands : ApplicationCommandModule
     {   
-        [SlashCommand("search", "Busca um item pelo nome")]
-        public async Task SearchCommand(InteractionContext ctx, [Option("busca", "Nome do item")] string input)
+        [SlashCommand("compra", "Pesquisa os pedidos de venda")]
+        public async Task SearchSellCommand(InteractionContext ctx, [Option("busca", "Nome do item")] string input)
         {   
             try
             {
                 Functions.SearchItem(input, out var inputItems, out var inputQualities);
-                var requestResult = await Functions.RequestItem(inputItems, inputQualities, true);
+                var requestResult = await Functions.RequestItem(inputItems, inputQualities, "sell");
+
+                if (requestResult.Count == 0)
+                {
+                    await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Sem resultados!"));
+                    return;
+                }
+
+                var interactivity = ctx.Client.GetInteractivity();
+
+                List<Page> pages = [];
+
+            
+                foreach (var item in requestResult)
+                {
+                    var page = new Page("", new DiscordEmbedBuilder() 
+                        .WithTitle($"{Functions.GetItem(item.Key).Name} {Functions.GetItem(item.Key).Tier}")
+                        .AddField("Preço", string.Join('\n', item.Value[2]), true)
+                        .AddField("Qualidade", string.Join('\n', item.Value[1]), true)
+                        .AddField("Localização", string.Join('\n', item.Value[0]), true));
+
+                    pages.Add(page);
+                }
+
+                await interactivity.SendPaginatedResponseAsync(ctx.Interaction, false, ctx.Member, pages);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ocorreu um erro: " + ex.Message);
+                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Ocorreu um erro!"));
+            }
+        }
+
+        [SlashCommand("venda", "Pesquisa os pedidos de compra")]
+        public async Task SearchBuyCommand(InteractionContext ctx, [Option("busca", "Nome do item")] string input)
+        {   
+            try
+            {
+                Functions.SearchItem(input, out var inputItems, out var inputQualities);
+                var requestResult = await Functions.RequestItem(inputItems, inputQualities, "buy");
 
                 if (requestResult.Count == 0) 
                 {
@@ -34,9 +74,9 @@ namespace Bot.Commands
                 {
                     var page = new Page("", new DiscordEmbedBuilder() 
                         .WithTitle($"{Functions.GetItem(item.Key).Name} {Functions.GetItem(item.Key).Tier}")
-                        .AddField("Preço", string.Join('\n', item.Value[0]), true)
+                        .AddField("Preço", string.Join('\n', item.Value[3]), true)
                         .AddField("Qualidade", string.Join('\n', item.Value[1]), true)
-                        .AddField("Localização", string.Join('\n', item.Value[2]), true));
+                        .AddField("Localização", string.Join('\n', item.Value[0]), true));
 
                     pages.Add(page);
                 }
