@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Immutable;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
@@ -81,14 +80,9 @@ namespace Bot.Utils
         }
         public static void SearchItem(string input, out IEnumerable<Item> result,  out IEnumerable<int> inputQualities)
         {
-            
             var inputTiers = TierRegex().Matches(input).Select(match => {
                 string tier = match.Groups["tier"].Value;
-                string enchant = match.Groups["enchant"].Value switch
-                {
-                    "" => ".0",
-                    _ => match.Groups["enchant"].Value,
-                };
+                string enchant = string.IsNullOrEmpty(match.Groups["enchant"].Value)? ".0":  match.Groups["enchant"].Value;
                 
                 return $"{tier}{enchant}";
             });
@@ -96,20 +90,22 @@ namespace Bot.Utils
             
             input = TierRegex().Replace(input, "");
             input = QualityRegex().Replace(input, "");
+            input = PrepositionRegex().Replace(input, "");
             input = CharRegex().Replace(input, "");
-            input = input.Trim();
+
+            Regex wordsRegex = new($@"(?=.*{string.Join(")(?=.*", input.Split(" ", StringSplitOptions.RemoveEmptyEntries))})", RegexOptions.IgnoreCase);
 
             if (inputTiers.Any())
             {   
-                result = from item in itemsData
-                    where item.Value.Name.Contains(input, StringComparison.OrdinalIgnoreCase) && inputTiers.Contains(item.Value.Tier)
-                    select item.Value;
+                result = itemsData
+                    .Where(item => wordsRegex.IsMatch(item.Value.Name) && inputTiers.Contains(item.Value.Tier))
+                    .Select(item => item.Value);
                 return;
             }
         
-            result = from item in itemsData
-                where item.Value.Name.Contains(input, StringComparison.OrdinalIgnoreCase) 
-                select item.Value;
+            result = result = itemsData
+                    .Where(item => wordsRegex.IsMatch(item.Value.Name))
+                    .Select(item => item.Value);
             return;
         }
 
@@ -120,10 +116,7 @@ namespace Bot.Utils
         }
 
         public static async Task<Dictionary<string, List<List<string>>>> RequestItem(IEnumerable<Item> items, IEnumerable<int> inputQualities, string? filterOfSearch = null)
-        {   
-
-            //Dictionary<string, string> nameDict = items.Select(item => item).ToDictionary(item => item.Code, item => $"{NamesRegex().Replace(item.Name, "")} {item.Tier}");
-
+        {            
             string apiUrl = $"https://west.albion-online-data.com/api/v2/stats/prices/{string.Join(",", items.Select(item => item.Code))}";
 
             if(inputQualities.Any())
@@ -194,8 +187,8 @@ namespace Bot.Utils
         
         [GeneratedRegex(@"[^\p{L}\s-]")]
         private static partial Regex CharRegex();
-        /* [GeneratedRegex(@"\sdo\s(Novato|Iniciante|Adepto|Perito|Mestre|Grão-mestre|Ancião)")]
-        private static partial Regex NamesRegex(); */
+        [GeneratedRegex(@"(^|\s)(de|do|da)(\s|$)", RegexOptions.IgnoreCase)]
+        private static partial Regex PrepositionRegex();
         [GeneratedRegex(@"t?(?<tier>[1-8])(?<enchant>.[0-4])?", RegexOptions.IgnoreCase)]
         private static partial Regex TierRegex();
         [GeneratedRegex(@"(Normal|Bom|Excepcional|Excelente|Obra-Prima|Obra Prima|Excep|Excel|Exp|Exc)", RegexOptions.IgnoreCase)]

@@ -5,6 +5,7 @@ using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Extensions;
 using Bot.Utils;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace Bot.Commands
 {   
@@ -15,10 +16,15 @@ namespace Bot.Commands
         public async Task SearchSellCommand(InteractionContext ctx, [Option("busca", "Nome do item")] string input)
         {   
             try
-            {
+            {   
                 Functions.SearchItem(input, out var inputItems, out var inputQualities);
-                var requestResult = await Functions.RequestItem(inputItems, inputQualities, "sell");
+                if (!inputItems.Any())
+                {
+                    await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Item não encontrado!"));
+                    return;
+                }
 
+                var requestResult = await Functions.RequestItem(inputItems, inputQualities, "sell");
                 if (requestResult.Count == 0)
                 {
                     await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Sem resultados!"));
@@ -26,10 +32,8 @@ namespace Bot.Commands
                 }
 
                 var interactivity = ctx.Client.GetInteractivity();
-
                 List<Page> pages = [];
 
-            
                 foreach (var item in requestResult)
                 {
                     var page = new Page("", new DiscordEmbedBuilder() 
@@ -57,8 +61,13 @@ namespace Bot.Commands
             try
             {
                 Functions.SearchItem(input, out var inputItems, out var inputQualities);
-                var requestResult = await Functions.RequestItem(inputItems, inputQualities, "buy");
+                if (!inputItems.Any())
+                {
+                    await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Item não encontrado!"));
+                    return;
+                }
 
+                var requestResult = await Functions.RequestItem(inputItems, inputQualities, "buy");
                 if (requestResult.Count == 0) 
                 {
                     await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Sem resultados!"));
@@ -66,10 +75,8 @@ namespace Bot.Commands
                 }
 
                 var interactivity = ctx.Client.GetInteractivity();
-
                 List<Page> pages = [];
 
-            
                 foreach (var item in requestResult)
                 {
                     var page = new Page("", new DiscordEmbedBuilder() 
