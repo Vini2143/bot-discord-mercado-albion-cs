@@ -1,4 +1,14 @@
 {
+  "QUESTITEM_TOKEN_AVALON": {
+    "Name": "Energia Avaloniana",
+    "Code": "QUESTITEM_TOKEN_AVALON",
+    "Tier": "6.0"
+  },
+  "UNIQUE_GVGTOKEN_GENERIC": {
+    "Name": "Energia Engarrafada",
+    "Code": "UNIQUE_GVGTOKEN_GENERIC",
+    "Tier": "4.0"
+  },
   "T3_2H_TOOL_TRACKING": {
     "Name": "Kit de Rastreamento do Iniciante",
     "Code": "T3_2H_TOOL_TRACKING",

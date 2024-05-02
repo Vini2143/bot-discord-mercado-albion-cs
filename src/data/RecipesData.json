@@ -48,6 +48,7 @@
         "T4_LEATHER_LEVEL3@3": 1,
         "T5_HIDE_LEVEL3@3": 3
     },
+    
     "T3_FARM_CHICKEN_GROWN":
     {
         "T3_FARM_CHICKEN_GROWN": 1,
@@ -55,10 +56,46 @@
         "T3_WHEAT": 9
         
     },
+
     "T3_MEAT":
     {
         "T3_MEAT": 20,
         "T3_FARM_CHICKEN_GROWN": 1
+    },
+    
+    "T3_MEAL_OMELETTE_AVALON":
+    {
+        "T3_MEAL_OMELETTE_AVALON": 10,
+        "T4_MILK": 4,
+        "T3_MEAT": 8,
+        "T3_EGG": 2,
+        "QUESTITEM_TOKEN_AVALON": 10
+    },
+    "T3_MEAL_OMELETTE_AVALON@1":
+    {
+        "T3_MEAL_OMELETTE_AVALON@1": 10,
+        "T4_MILK": 4,
+        "T3_MEAT": 8,
+        "T3_EGG": 2,
+        "QUESTITEM_TOKEN_AVALON": 10,
+        "T1_FISHSAUCE_LEVEL1":10
+    },
+    "T3_MEAL_OMELETTE_AVALON@2":
+    {
+        "T3_MEAL_OMELETTE_AVALON@2": 10,
+        "T4_MILK": 4,
+        "T3_MEAT": 8,
+        "T3_EGG": 2,
+        "QUESTITEM_TOKEN_AVALON": 10,
+        "T1_FISHSAUCE_LEVEL2":10
+    },
+    "T3_MEAL_OMELETTE_AVALON@3":
+    {
+        "T3_MEAL_OMELETTE_AVALON@3": 10,
+        "T4_MILK": 4,
+        "T3_MEAT": 8,
+        "T3_EGG": 2,
+        "QUESTITEM_TOKEN_AVALON": 10,
+        "T1_FISHSAUCE_LEVEL3":10
     }
-
 }

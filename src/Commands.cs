@@ -6,6 +6,7 @@ using DSharpPlus.Interactivity.Extensions;
 using Bot.Utils;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace Bot.Commands
 {   
@@ -24,7 +25,7 @@ namespace Bot.Commands
                     return;
                 }
 
-                var requestResult = await Functions.RequestItem(inputItems, inputQualities, "sell");
+                var requestResult = await Functions.RequestItem(inputItems, inputQualities, [], "sell");
                 if (requestResult.Count == 0)
                 {
                     await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Sem resultados!"));
@@ -67,7 +68,7 @@ namespace Bot.Commands
                     return;
                 }
 
-                var requestResult = await Functions.RequestItem(inputItems, inputQualities, "buy");
+                var requestResult = await Functions.RequestItem(inputItems, inputQualities, [], "buy");
                 if (requestResult.Count == 0) 
                 {
                     await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Sem resultados!"));
@@ -106,7 +107,7 @@ namespace Bot.Commands
                 Functions.SearchItem(input, out var inputItems, out var inputQualities);
                 Functions.SearchItemRecipe(inputItems,out var recipe, out var recipeItems);
                 
-                var requestResult = await Functions.RequestItem(recipeItems, []);
+                var requestResult = await Functions.RequestItem(recipeItems, [], ["Bridgewatch", "Caerleon", "Fort Sterling", "Lymhurst", "Martlock", "Thetford"]);
 
                 if (requestResult.Count == 0) 
                 {
@@ -118,14 +119,16 @@ namespace Bot.Commands
 
                 List<Page> pages = [];
 
+                Console.WriteLine(JsonConvert.SerializeObject(requestResult, Formatting.Indented));
+
                 for(int index = 0; index <= 5; index++)
                 {
                     var item = recipe.First();
-                    var costs = recipe.Skip(1).Select(item => $"**{item.Value}x** {Functions.GetItem(item.Key).Name}(**{requestResult[item.Key][0][index]}**)");
+                    var costs = recipe.Skip(1).Select(item => $"**{item.Value}x** {Functions.GetItem(item.Key).Name}(**{requestResult[item.Key][2][index]}**)");
 
                     var page = new Page("", new DiscordEmbedBuilder() 
-                        .WithTitle($"Profit em {requestResult[item.Key][2][index]}")
-                        .AddField("Produto", $"**{item.Value}x** {Functions.GetItem(item.Key).Name}(**{requestResult[item.Key][0][index]}**)")
+                        .WithTitle($"Profit em {requestResult[item.Key][0][index]}")
+                        .AddField("Produto", $"**{item.Value}x** {Functions.GetItem(item.Key).Name}(**{requestResult[item.Key][2][index]}**)")
                         .AddField("Custos", $"\n{string.Join('\n', costs)}"));
                     
                     pages.Add(page);

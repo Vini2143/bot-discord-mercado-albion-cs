@@ -115,9 +115,15 @@ namespace Bot.Utils
             recipeItems = recipe.Keys.Select(itemCode => itemsData[itemCode]);
         }
 
-        public static async Task<Dictionary<string, List<List<string>>>> RequestItem(IEnumerable<Item> items, IEnumerable<int> inputQualities, string? filterOfSearch = null)
-        {            
+        public static async Task<Dictionary<string, List<List<string>>>> RequestItem(IEnumerable<Item> items, IEnumerable<int> inputQualities, IEnumerable<string> inputLocations, string? filterOfSearch = null)
+        {
+
             string apiUrl = $"https://west.albion-online-data.com/api/v2/stats/prices/{string.Join(",", items.Select(item => item.Code))}";
+
+            if(inputLocations.Any())
+            {
+                apiUrl += $"?locations={string.Join(',', inputLocations)}";
+            }
 
             if(inputQualities.Any())
             {
@@ -147,12 +153,12 @@ namespace Bot.Utils
                     
                     "buy" => from item in list
                         where cities.ContainsKey(item.City) && item.BuyPriceMin != 0
-                        orderby item.BuyPriceMax descending
+                        orderby item.BuyPriceMin descending
                         select item,
                     
                     _ => from item in list
                         where cities.ContainsKey(item.City)
-                        orderby item.SellPriceMin ascending
+                        orderby item.City ascending
                         select item,
                 };
 
