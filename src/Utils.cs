@@ -116,14 +116,10 @@ namespace Bot.Utils
         }
 
         public static async Task<Dictionary<string, List<List<string>>>> RequestItem(IEnumerable<Item> items, IEnumerable<int> inputQualities, IEnumerable<string> inputLocations, string? filterOfSearch = null)
-        {
+        {   
+            var locations = inputLocations.Any() ? inputLocations : cities.Keys;
 
-            string apiUrl = $"https://west.albion-online-data.com/api/v2/stats/prices/{string.Join(",", items.Select(item => item.Code))}";
-
-            if(inputLocations.Any())
-            {
-                apiUrl += $"?locations={string.Join(',', inputLocations)}";
-            }
+            string apiUrl = $"https://west.albion-online-data.com/api/v2/stats/prices/{string.Join(",", items.Select(item => item.Code))}?locations={string.Join(',', locations)}";
 
             if(inputQualities.Any())
             {
@@ -147,17 +143,16 @@ namespace Bot.Utils
                 IEnumerable<MarketData> result = filterOfSearch switch
                 {
                     "sell" => from item in list
-                        where cities.ContainsKey(item.City) && item.SellPriceMin != 0
+                        where item.SellPriceMin != 0 && item.City != "Black Market"
                         orderby item.SellPriceMin ascending
                         select item,
                     
                     "buy" => from item in list
-                        where cities.ContainsKey(item.City) && item.BuyPriceMin != 0
+                        where item.BuyPriceMin != 0
                         orderby item.BuyPriceMin descending
                         select item,
                     
                     _ => from item in list
-                        where cities.ContainsKey(item.City)
                         orderby item.City ascending
                         select item,
                 };
