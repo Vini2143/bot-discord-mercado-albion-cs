@@ -119,17 +119,18 @@ namespace Bot.Commands
 
                 List<Page> pages = [];
 
-                Console.WriteLine(JsonConvert.SerializeObject(requestResult, Formatting.Indented));
+                //Console.WriteLine(JsonConvert.SerializeObject(requestResult, Formatting.Indented));
 
                 for(int index = 0; index <= 5; index++)
                 {
                     var item = recipe.First();
                     var costs = recipe.Skip(1).Select(item => $"**{item.Value}x** {Functions.GetItem(item.Key).Name}(**{requestResult[item.Key][2][index]}**)");
+                    var totalCost = recipe.Skip(1).Select(item => item.Value * Int32.Parse(requestResult[item.Key][2][index]));
 
                     var page = new Page("", new DiscordEmbedBuilder() 
                         .WithTitle($"Profit em {requestResult[item.Key][0][index]}")
                         .AddField("Produto", $"**{item.Value}x** {Functions.GetItem(item.Key).Name}(**{requestResult[item.Key][2][index]}**)")
-                        .AddField("Custos", $"\n{string.Join('\n', costs)}"));
+                        .AddField("Custos", $"\n{string.Join('\n', costs)}\n**Custo Total:**{totalCost.Sum()}"));
                     
                     pages.Add(page);
                 }
