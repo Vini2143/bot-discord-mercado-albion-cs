@@ -1,10 +1,16 @@
+using System.Collections;
 using System.Collections.Immutable;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-using Sprache;
+using Newtonsoft.Json.Linq;
 
 namespace Bot.Utils
-{   
+{
+    public sealed class Resource
+    {
+        public required string uniqueName { get; set; }
+        public int count { get; set;}
+    }
     public sealed class MarketData 
     {
         [JsonProperty("item_id")]
@@ -35,6 +41,7 @@ namespace Bot.Utils
         public required string Name { get; set; }
         public required string Code { get; set; }
         public required string Tier { get; set; }
+        public required string Enchant { get; set; }
     }
 
     public sealed partial class Functions
@@ -61,69 +68,113 @@ namespace Bot.Utils
             {"exc", 4},
             {"excep", 3},
             {"excel", 4},
+            
         };
-        private static readonly Dictionary<string, string> cities = new()
-        {
-            {"Bridgewatch", "Bridgewatch"},
-            {"Caerleon", "Caerleon"},
-            {"Fort Sterling", "Fort Sterling"},
-            {"Lymhurst", "Lymhurst"},
-            {"Martlock", "Martlock"},
-            {"Thetford", "Thetford"},
-            {"Black Market", "Black Market"},
-            {"5003", "Brecilien"},
-        };
+        private static readonly List<string> cities =
+        [
+            "Bridgewatch",
+            "Caerleon",
+            "Fort%20Sterling",
+            "Lymhurst",
+            "Martlock",
+            "Thetford",
+            "Black%20Market",
+            "Brecilien",
+        ];
             
         public static Item GetItem(string code)
         {
             return itemsData[code];
         }
-        public static void SearchItem(string input, out IEnumerable<Item> result,  out IEnumerable<int> inputQualities)
+        public static void SearchItem(string input, out IEnumerable<Item> result,  out IEnumerable<int> inputQualities, bool enchantFilterIsOn = true)
         {
             var inputTiers = TierRegex().Matches(input).Select(match => {
                 string tier = match.Groups["tier"].Value;
-                string enchant = string.IsNullOrEmpty(match.Groups["enchant"].Value)? ".0":  match.Groups["enchant"].Value;
+                string enchant = enchantFilterIsOn && !string.IsNullOrEmpty(match.Groups["enchant"].Value) ? match.Groups["enchant"].Value : "0";
                 
-                return $"{tier}{enchant}";
+                return (tier, enchant);
             });
-            inputQualities = QualityRegex().Matches(input).Select(match => qualitiesCode[match.Value.ToLower()]);
+
+            inputQualities = QualityRegex().Matches(input).Select(match => qualitiesCode[match.Value.ToLower()]);            
             
             input = TierRegex().Replace(input, "");
             input = QualityRegex().Replace(input, "");
-            input = PrepositionRegex().Replace(input, "");
+            input = PrepositionRegex().Replace(input, " ");
             input = CharRegex().Replace(input, "");
 
-            Regex wordsRegex = new($@"(?=.*{string.Join(")(?=.*", input.Split(" ", StringSplitOptions.RemoveEmptyEntries))})", RegexOptions.IgnoreCase);
+            var inputKeyWords = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+            Regex searchRegex = new($@"(?=.*{string.Join(")(?=.*", inputKeyWords)})", RegexOptions.IgnoreCase);
 
             if (inputTiers.Any())
             {   
                 result = itemsData
-                    .Where(item => wordsRegex.IsMatch(item.Value.Name) && inputTiers.Contains(item.Value.Tier))
+                    .Where(item => searchRegex.IsMatch(item.Value.Name) && inputTiers.Contains((item.Value.Tier, item.Value.Enchant)))
                     .Select(item => item.Value);
                 return;
             }
         
-            result = result = itemsData
-                    .Where(item => wordsRegex.IsMatch(item.Value.Name))
+            result = itemsData
+                    .Where(item => searchRegex.IsMatch(item.Value.Name))
                     .Select(item => item.Value);
             return;
         }
 
-        public static void SearchItemRecipe(IEnumerable<Item> items, out Dictionary<string, int> recipe, out IEnumerable<Item> recipeItems)
+        public static async Task<IEnumerable<Resource>> RequestItemRecipe(Item item)
         {   
-            recipe = items.Where(item => recipesData.ContainsKey(item.Code)).Select(item => recipesData[item.Code]).First();
-            recipeItems = recipe.Keys.Select(itemCode => itemsData[itemCode]);
+            try
+            {
+                string apiUrl = $"https://gameinfo.albiononline.com/api/gameinfo/items/{item.Code}/data";
+                Console.WriteLine(apiUrl);
+
+                HttpClient client = new();
+
+            
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                response.EnsureSuccessStatusCode();
+            
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                var itemData = JsonConvert.DeserializeObject<JToken>(responseBody);
+
+                IEnumerable<Resource> resourceList = [];
+
+                var enchantedVariants = itemData!["enchantments"]!["enchantments"];
+
+                var itemType = itemData["itemType"]!.ToObject<string>();
+                if (item.Enchant == "0" && itemType == "consumable")
+                {
+                    resourceList = enchantedVariants!.First()["craftingRequirements"]!["craftResourceList"]!.ToObject<IEnumerable<Resource>>()!.SkipLast(1);
+                    return resourceList;
+                }
+                if (item.Enchant == "0")
+                {
+                    resourceList = itemData!["craftingRequirements"]!["craftResourceList"]!.ToObject<IEnumerable<Resource>>()!;
+                    return resourceList;
+                }
+                
+                resourceList = enchantedVariants!.Where(enchantedItem => enchantedItem["enchantmentLevel"]!.ToString() == item.Enchant).First()["craftingRequirements"]!["craftResourceList"]!.ToObject<IEnumerable<Resource>>()!;
+
+                return resourceList;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ocorreu um erro: " + ex.ToString());
+                return [];
+            }
+
         }
 
         public static async Task<Dictionary<string, List<List<string>>>> RequestItem(IEnumerable<Item> items, IEnumerable<int> inputQualities, IEnumerable<string> inputLocations, string? filterOfSearch = null)
         {   
-            var locations = inputLocations.Any() ? inputLocations : cities.Keys;
+            var locations = inputLocations.Any() ? inputLocations : cities;
 
-            string apiUrl = $"https://west.albion-online-data.com/api/v2/stats/prices/{string.Join(",", items.Select(item => item.Code))}?locations={string.Join(',', locations)}";
+            string apiUrl = $"https://west.albion-online-data.com/api/v2/stats/prices/{string.Join(",", items.Select(item => item.Enchant == "0" ? item.Code : $"{item.Code}@{item.Enchant}"))}?locations={string.Join(',', locations)}";
 
             if(inputQualities.Any())
             {
-                apiUrl += $"?qualities={string.Join(',', inputQualities)}";
+                apiUrl += $"&qualities={string.Join(',', inputQualities)}";
             }
 
             HttpClient client = new();
@@ -166,7 +217,7 @@ namespace Bot.Utils
                         data[item.ItemId] = value;
                     }
                     
-                    value[0].Add(cities[item.City]);
+                    value[0].Add(item.City);
                     value[1].Add($"{qualitiesName[item.Quality]}");
 
                     value[2].Add(item.SellPriceMin.ToString());
@@ -190,7 +241,7 @@ namespace Bot.Utils
         private static partial Regex CharRegex();
         [GeneratedRegex(@"(^|\s)(de|do|da)(\s|$)", RegexOptions.IgnoreCase)]
         private static partial Regex PrepositionRegex();
-        [GeneratedRegex(@"t?(?<tier>[1-8])(?<enchant>.[0-4])?", RegexOptions.IgnoreCase)]
+        [GeneratedRegex(@"t?(?<tier>[1-8])(.(?<enchant>[0-4]))?", RegexOptions.IgnoreCase)]
         private static partial Regex TierRegex();
         [GeneratedRegex(@"(Normal|Bom|Excepcional|Excelente|Obra-Prima|Obra Prima|Excep|Excel|Exp|Exc)", RegexOptions.IgnoreCase)]
         private static partial Regex QualityRegex();

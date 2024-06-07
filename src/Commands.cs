@@ -13,7 +13,7 @@ namespace Bot.Commands
     
     public sealed class Commands : ApplicationCommandModule
     {   
-        [SlashCommand("compra", "Pesquisa os pedidos de venda")]
+        [SlashCommand("vendas", "Pesquisa os pedidos de venda")]
         public async Task SearchSellCommand(InteractionContext ctx, [Option("busca", "Nome do item")] string input)
         {   
             try
@@ -37,8 +37,9 @@ namespace Bot.Commands
 
                 foreach (var item in requestResult)
                 {
-                    var page = new Page("", new DiscordEmbedBuilder() 
-                        .WithTitle($"{Functions.GetItem(item.Key).Name} {Functions.GetItem(item.Key).Tier}")
+                    var page = new Page("", new DiscordEmbedBuilder()
+                        .WithThumbnail($"https://render.albiononline.com/v1/item/{Functions.GetItem(item.Key).Code}.png")
+                        .WithTitle($"{Functions.GetItem(item.Key).Name} {Functions.GetItem(item.Key).Tier}.{Functions.GetItem(item.Key).Enchant}")
                         .AddField("Preço", string.Join('\n', item.Value[2]), true)
                         .AddField("Qualidade", string.Join('\n', item.Value[1]), true)
                         .AddField("Localização", string.Join('\n', item.Value[0]), true));
@@ -56,7 +57,7 @@ namespace Bot.Commands
             }
         }
 
-        [SlashCommand("venda", "Pesquisa os pedidos de compra")]
+        [SlashCommand("compras", "Pesquisa os pedidos de compra")]
         public async Task SearchBuyCommand(InteractionContext ctx, [Option("busca", "Nome do item")] string input)
         {   
             try
@@ -81,7 +82,8 @@ namespace Bot.Commands
                 foreach (var item in requestResult)
                 {
                     var page = new Page("", new DiscordEmbedBuilder() 
-                        .WithTitle($"{Functions.GetItem(item.Key).Name} {Functions.GetItem(item.Key).Tier}")
+                        .WithThumbnail($"https://render.albiononline.com/v1/item/{item.Key}.png")
+                        .WithTitle($"{Functions.GetItem(item.Key).Name} {Functions.GetItem(item.Key).Tier}.{Functions.GetItem(item.Key).Enchant}")
                         .AddField("Preço", string.Join('\n', item.Value[3]), true)
                         .AddField("Qualidade", string.Join('\n', item.Value[1]), true)
                         .AddField("Localização", string.Join('\n', item.Value[0]), true));
@@ -99,16 +101,19 @@ namespace Bot.Commands
             }
         }
 
-        [SlashCommand("profitas", "Calcula o lucro")]
+        [SlashCommand("profitas", "Busca o preço dos recursos usados na produção")]
         public async Task ProfitasCommand(InteractionContext ctx, [Option("item", "Nome do item")] string input)
         {
             try
             {
                 Functions.SearchItem(input, out var inputItems, out var inputQualities);
-                Functions.SearchItemRecipe(inputItems,out var recipe, out var recipeItems);
-                
-                var requestResult = await Functions.RequestItem(recipeItems, [], ["Bridgewatch", "Caerleon", "Fort Sterling", "Lymhurst", "Martlock", "Thetford"]);
+                var product = inputItems.First();
+                var resourceList = await Functions.RequestItemRecipe(product);
 
+                IEnumerable<Item> recipeItems = resourceList.Select(item => Functions.GetItem(item.uniqueName)).Append(inputItems.First());
+
+                
+                var requestResult = await Functions.RequestItem(recipeItems, [1], ["Bridgewatch", "Caerleon", "Fort Sterling", "Lymhurst", "Martlock", "Thetford", "Brecilien"]);
                 if (requestResult.Count == 0) 
                 {
                     await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Sem resultados!"));
@@ -118,10 +123,9 @@ namespace Bot.Commands
                 var interactivity = ctx.Client.GetInteractivity();
 
                 List<Page> pages = [];
+                
 
-                //Console.WriteLine(JsonConvert.SerializeObject(requestResult, Formatting.Indented));
-
-                for(int index = 0; index <= 5; index++)
+                /* for(int index = 0; index <= 5; index++)
                 {
                     var item = recipe.First();
                     var costs = recipe.Skip(1).Select(item => $"**{item.Value}x** {Functions.GetItem(item.Key).Name}(**{requestResult[item.Key][2][index]}**)");
@@ -132,6 +136,29 @@ namespace Bot.Commands
                         .AddField("Produto", $"**{item.Value}x** {Functions.GetItem(item.Key).Name}(**{requestResult[item.Key][2][index]}**)")
                         .AddField("Custos", $"\n{string.Join('\n', costs)}\n**Custo Total:**{totalCost.Sum()}"));
                     
+                    pages.Add(page);
+                }*/
+                string productCode = product.Enchant == "0" ? product.Code : $"{product.Code}@{product.Enchant}";
+                var page1 = new Page("", new DiscordEmbedBuilder() 
+                    .WithThumbnail($"https://render.albiononline.com/v1/item/{productCode}.png")
+                    .WithTitle($"{product.Name} {product.Tier}.{product.Enchant}")
+                    .AddField("Localização", string.Join('\n',  requestResult[productCode][0]), true)
+                    .AddField("Pedido venda", string.Join('\n',  requestResult[productCode][2]), true)
+                    .AddField("Pedido compra", string.Join('\n',  requestResult[productCode][3]), true));
+
+                pages.Add(page1);
+
+                requestResult.Remove(productCode);
+
+                foreach (var item in requestResult)
+                {
+                    var page = new Page("", new DiscordEmbedBuilder() 
+                        .WithThumbnail($"https://render.albiononline.com/v1/item/{item.Key}.png")
+                        .WithTitle($"x {Functions.GetItem(item.Key).Name} {Functions.GetItem(item.Key).Tier}.{Functions.GetItem(item.Key).Enchant}")
+                        .AddField("Localização", string.Join('\n', item.Value[0]), true)
+                        .AddField("Pedido venda", string.Join('\n', item.Value[2]), true)
+                        .AddField("Pedido compra", string.Join('\n', item.Value[3]), true));
+
                     pages.Add(page);
                 }
 
