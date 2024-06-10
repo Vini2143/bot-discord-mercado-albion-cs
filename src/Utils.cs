@@ -120,15 +120,13 @@ namespace Bot.Utils
             return;
         }
 
-        public static async Task<IEnumerable<Resource>> RequestItemRecipe(Item item)
+        public static async Task<Dictionary<string, int>> RequestItemRecipe(Item item)
         {   
             try
             {
                 string apiUrl = $"https://gameinfo.albiononline.com/api/gameinfo/items/{item.Code}/data";
-                Console.WriteLine(apiUrl);
 
                 HttpClient client = new();
-
             
                 HttpResponseMessage response = await client.GetAsync(apiUrl);
 
@@ -138,25 +136,32 @@ namespace Bot.Utils
 
                 var itemData = JsonConvert.DeserializeObject<JToken>(responseBody);
 
-                IEnumerable<Resource> resourceList = [];
+                Dictionary<string, int> recipe = [];
 
                 var enchantedVariants = itemData!["enchantments"]!["enchantments"];
 
                 var itemType = itemData["itemType"]!.ToObject<string>();
                 if (item.Enchant == "0" && itemType == "consumable")
                 {
-                    resourceList = enchantedVariants!.First()["craftingRequirements"]!["craftResourceList"]!.ToObject<IEnumerable<Resource>>()!.SkipLast(1);
-                    return resourceList;
+                    recipe = enchantedVariants!.First()["craftingRequirements"]!["craftResourceList"]!
+                                .ToObject<IEnumerable<Resource>>()!
+                                .SkipLast(1)
+                                .ToDictionary(resource => resource.uniqueName, resource => resource.count);
+                    return recipe;
                 }
                 if (item.Enchant == "0")
                 {
-                    resourceList = itemData!["craftingRequirements"]!["craftResourceList"]!.ToObject<IEnumerable<Resource>>()!;
-                    return resourceList;
+                    recipe = itemData!["craftingRequirements"]!["craftResourceList"]!
+                                .ToObject<IEnumerable<Resource>>()!
+                                .ToDictionary(resource => resource.uniqueName, resource => resource.count);
+                    return recipe;
                 }
                 
-                resourceList = enchantedVariants!.Where(enchantedItem => enchantedItem["enchantmentLevel"]!.ToString() == item.Enchant).First()["craftingRequirements"]!["craftResourceList"]!.ToObject<IEnumerable<Resource>>()!;
-
-                return resourceList;
+                recipe = enchantedVariants!.Where(enchantedItem => enchantedItem["enchantmentLevel"]!.ToString() == item.Enchant)
+                    .First()["craftingRequirements"]!["craftResourceList"]!
+                    .ToObject<IEnumerable<Resource>>()!
+                    .ToDictionary(resource => resource.uniqueName, resource => resource.count);
+                return recipe;
             }
             catch (Exception ex)
             {

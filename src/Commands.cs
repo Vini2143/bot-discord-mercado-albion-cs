@@ -5,8 +5,6 @@ using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Extensions;
 using Bot.Utils;
 using Newtonsoft.Json;
-using System.Diagnostics;
-using System.Text.Json;
 
 namespace Bot.Commands
 {   
@@ -108,12 +106,12 @@ namespace Bot.Commands
             {
                 Functions.SearchItem(input, out var inputItems, out var inputQualities);
                 var product = inputItems.First();
-                var resourceList = await Functions.RequestItemRecipe(product);
+                var recipe = await Functions.RequestItemRecipe(product);
 
-                IEnumerable<Item> recipeItems = resourceList.Select(item => Functions.GetItem(item.uniqueName)).Append(inputItems.First());
+                IEnumerable<Item> itemList = recipe.Select(item => Functions.GetItem(item.Key)).Append(product);
 
                 
-                var requestResult = await Functions.RequestItem(recipeItems, [1], ["Bridgewatch", "Caerleon", "Fort Sterling", "Lymhurst", "Martlock", "Thetford", "Brecilien"]);
+                var requestResult = await Functions.RequestItem(itemList, [1], ["Bridgewatch", "Caerleon", "Fort Sterling", "Lymhurst", "Martlock", "Thetford", "Brecilien"]);
                 if (requestResult.Count == 0) 
                 {
                     await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Sem resultados!"));
@@ -154,7 +152,7 @@ namespace Bot.Commands
                 {
                     var page = new Page("", new DiscordEmbedBuilder() 
                         .WithThumbnail($"https://render.albiononline.com/v1/item/{item.Key}.png")
-                        .WithTitle($"x {Functions.GetItem(item.Key).Name} {Functions.GetItem(item.Key).Tier}.{Functions.GetItem(item.Key).Enchant}")
+                        .WithTitle($"{recipe[item.Key]}x {Functions.GetItem(item.Key).Name} {Functions.GetItem(item.Key).Tier}.{Functions.GetItem(item.Key).Enchant}")
                         .AddField("Localização", string.Join('\n', item.Value[0]), true)
                         .AddField("Pedido venda", string.Join('\n', item.Value[2]), true)
                         .AddField("Pedido compra", string.Join('\n', item.Value[3]), true));
