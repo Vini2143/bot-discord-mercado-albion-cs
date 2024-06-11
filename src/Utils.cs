@@ -47,7 +47,6 @@ namespace Bot.Utils
     public sealed partial class Functions
     {   
         private static readonly Dictionary<string, Item> itemsData = JsonConvert.DeserializeObject<Dictionary<string, Item>>(File.ReadAllText("./src/data/ItemsData.json"))!;
-        private static readonly Dictionary<string, Dictionary<string, int>> recipesData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, int>>>(File.ReadAllText("./src/data/RecipesData.json"))!;
         private static readonly Dictionary<int, string> qualitiesName = new()
         {
             {1, "Normal"},
