@@ -36,7 +36,7 @@ namespace Bot.Commands
                 foreach (var item in requestResult)
                 {
                     var page = new Page("", new DiscordEmbedBuilder()
-                        .WithThumbnail($"https://render.albiononline.com/v1/item/{Functions.GetItem(item.Key).Code}.png")
+                        .WithThumbnail($"https://render.albiononline.com/v1/item/{item.Key}.png")
                         .WithTitle($"{Functions.GetItem(item.Key).Name} {Functions.GetItem(item.Key).Tier}.{Functions.GetItem(item.Key).Enchant}")
                         .AddField("Preço", string.Join('\n', item.Value[2]), true)
                         .AddField("Qualidade", string.Join('\n', item.Value[1]), true)
